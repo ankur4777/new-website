@@ -542,3 +542,69 @@
 [data-motion="off"] .art-directed-preview * { animation: none !important; transition: none !important; }
 [data-motion="off"] .idea-preview-panel * { animation: none !important; transition: none !important; }
 @media (max-width:600px) { .idea-preview-panel.is-expanded .idea-return-choices > span { display:none; } .idea-preview-panel.is-expanded .idea-return-choices { padding:8px; flex-shrink:0; } }
+@container (min-width: 850px) {
+  .ad-nav { min-height:80px; padding-block:21px; }
+  .ad-nav-links button { font-size:12px; }
+  .ad-nav-cta { font-size:11px !important; padding:10px 14px; }
+  .ad-feature-rail { padding-block:10px; }
+  .ad-feature-rail button { font-size:10px; padding:6px 10px; }
+  .ad-eyebrow { font-size:9px; }
+  .ad-primary { font-size:12px !important; padding:14px 18px; min-height:46px; }
+  .ad-hero-note { font-size:10px; }
+  .ad-floating-caption { padding:20px; }
+  .ad-floating-caption > span { font-size:8px; }
+  .ad-floating-caption > b { font-size:16px; }
+  .ad-split-corner { font-size:8px; }
+  .ad-editorial-meta, .ad-editorial-caption { font-size:8px; }
+  .ad-editorial-title > div > p, .ad-gallery-lead > p, .ad-poster-bottom p { font-size:13px; }
+  .ad-gallery-lead > p, .ad-poster-bottom p { max-width:420px; }
+  .ad-gallery-pictures b, .ad-service-ribbon > span { font-size:10px; }
+  .ad-story > p { font-size:13px; }
+  .ad-collection-heading > button { font-size:11px; }
+  .ad-collection-grid h5 { font-size:18px; }
+  .ad-collection-grid p { font-size:12px; }
+  .ad-collection-grid .ad-eyebrow { font-size:8px; }
+  .ad-collection-art { height:260px; }
+  .ad-footer > span { font-size:7px; }
+  .ad-footer > button { font-size:11px; }
+  .ad-workspace { grid-template-columns:165px minmax(0,1fr); }
+  .ad-workspace-sidebar { padding:28px 15px; gap:9px; }
+  .ad-workspace-sidebar > .ad-eyebrow { font-size:8px; margin-bottom:17px; }
+  .ad-workspace-sidebar > button { font-size:10px; padding:10px; gap:10px; }
+  .ad-sidebar-symbol { font-size:16px; width:18px; }
+  .ad-workspace-member { font-size:10px; gap:11px; }
+  .ad-workspace-member > span { width:32px; height:32px; font-size:9px; }
+  .ad-workspace-member small { font-size:6px; }
+  .ad-workspace-main { padding:32px; }
+  .ad-workspace-main > header p { font-size:12px; }
+  .ad-demo-pill { font-size:7px; padding:6px 8px; }
+  .ad-workspace-stats { gap:13px; margin-top:29px; }
+  .ad-workspace-stats > button { padding:17px; }
+  .ad-workspace-stats > button > span { font-size:10px; }
+  .ad-workspace-stats > button > b { font-size:40px; }
+  .ad-workspace-stats > button > small { font-size:8px; }
+  .ad-overview-chart { padding:22px; }
+  .ad-overview-chart h4 { font-size:15px; }
+  .ad-period-toggle button { font-size:9px; padding:5px 8px; }
+  .ad-chart-value { font-size:11px; }
+  .ad-chart-axis { font-size:7px; }
+  .ad-progress-panel .ad-eyebrow { font-size:8px; }
+  .ad-progress-panel > p { font-size:12px; }
+  .ad-progress-dial { width:145px; }
+  .ad-progress-dial > span { font-size:40px; }
+  .ad-progress-dial small { font-size:6px; }
+  .ad-workspace-next { padding:22px; }
+  .ad-workspace-next .ad-eyebrow { font-size:8px; }
+  .ad-workspace-next h4 { font-size:24px; }
+  .ad-workspace-next > button { font-size:12px; padding-block:15px; }
+  .ad-workspace-next > button > span { font-size:8px; }
+  .ad-kanban { gap:15px; margin-top:28px; }
+  .ad-kanban h4 { font-size:11px; }
+  .ad-kanban h4 > span { font-size:8px; }
+  .ad-kanban article { padding:19px; }
+  .ad-kanban article > span { font-size:7px; }
+  .ad-kanban h5 { font-size:17px; }
+  .ad-kanban p { font-size:11px; }
+  .ad-kanban article > div { font-size:7px; }
+  .ad-task-action { font-size:10px !important; }
+}
