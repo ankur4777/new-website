@@ -1,6 +1,9 @@
 export const company = {
   name: "YourCompany",
   descriptor: "Digital, done differently.",
+  // Add your company email or WhatsApp number (with country code) to enable direct concept enquiries.
+  email: "",
+  whatsapp: "",
 };
 
 export type Service = {

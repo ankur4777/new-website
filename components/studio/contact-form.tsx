@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { services } from "@/lib/studio-content";
+import { company, services } from "@/lib/studio-content";
+import { CONCEPT_HANDOFF_KEY, getEnquiryLink, parseConceptHandoff } from "@/lib/project-concept";
 import { ArrowLeft } from "lucide-react";
 import { AnimatedIcon } from "./animated-icon";
 import { Icon } from "./ui";
@@ -18,10 +19,30 @@ export default function ContactForm() {
   const [budget, setBudget] = useState("Let’s discuss");
   const [error, setError] = useState("");
   const [brief, setBrief] = useState<Brief | null>(null);
+  const [description, setDescription] = useState("");
+  const [attachedConcept, setAttachedConcept] = useState<{ name: string; palette: string } | null>(null);
   useEffect(() => {
-    const s = new URLSearchParams(location.search).get("service");
+    const params = new URLSearchParams(location.search);
+    const s = params.get("service");
     if (s && services.some((x) => x.slug === s)) setSelected([s]);
+    if (params.get("from") === "idea-studio") {
+      try {
+        const concept = parseConceptHandoff(sessionStorage.getItem(CONCEPT_HANDOFF_KEY));
+        if (concept) {
+          setSelected([concept.service]);
+          setDescription(concept.description);
+          setAttachedConcept({ name: concept.name, palette: concept.palette });
+        }
+      } catch {}
+    }
   }, []);
+  function clearConcept() {
+    setAttachedConcept(null);
+    setDescription("");
+    setSelected([]);
+    try { sessionStorage.removeItem(CONCEPT_HANDOFF_KEY); } catch {}
+  }
+  const directContact = brief ? getEnquiryLink(`PROJECT ENQUIRY\nName: ${brief.name}\nEmail: ${brief.email}\nCompany: ${brief.company || "Not specified"}\nServices: ${brief.services.join(", ")}\nBudget: ${brief.budget}\nTimeline: ${brief.timeline}\n\n${brief.description}`, company) : null;
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!selected.length) {
@@ -53,6 +74,7 @@ export default function ContactForm() {
   return (
     <div className="contact-form-wrap">
       <form onSubmit={submit} className={brief ? "form-hidden" : ""}>
+        {attachedConcept && <div className="concept-attached"><AnimatedIcon name="check" size={22}/><div><b>Your concept came along.</b><p>{attachedConcept.name} · {attachedConcept.palette}<br/>Your requirements are filled in below. Edit anything you like.</p></div><button type="button" onClick={clearConcept}>Clear</button></div>}
         <fieldset>
           <legend>
             <span>01 /</span> What do you have in mind?
@@ -135,6 +157,8 @@ export default function ContactForm() {
             Your idea <span>*</span>
             <textarea
               name="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="The idea, the challenge, the what-if. We’re listening."
               required
               minLength={15}
@@ -175,9 +199,7 @@ export default function ContactForm() {
             <AnimatedIcon name="arrow" size={18} />
           </button>
           <p>
-            UI preview · Your details stay in this page.
-            <br />
-            Enquiry delivery will be connected before public launch.
+            {company.email || company.whatsapp ? "Review your brief, then choose the contact link to share it with us." : <>Your details stay in this page.<br/>Direct enquiry delivery is waiting for the company contact details.</>}
           </p>
         </div>
       </form>
@@ -203,6 +225,7 @@ export default function ContactForm() {
             <p>{brief.description}</p>
           </div>
           <div className="brief-actions">
+            {directContact?.direct && <a className="button button-primary" href={directContact.href}>{directContact.label}<AnimatedIcon name="arrow" size={17}/></a>}
             <button className="button button-primary" onClick={download}>
               Download your brief
               <AnimatedIcon name="download" size={17} />
@@ -213,8 +236,7 @@ export default function ContactForm() {
             </button>
           </div>
           <p className="brief-notice">
-            Preview only. Nothing has been sent. Enquiry delivery will be
-            connected when the company contact details are ready.
+            {directContact?.direct ? "Your brief is ready to share. The contact link opens a message for you to review and send." : "Your brief has been prepared locally. Direct enquiry delivery will be connected when the company contact details are ready."}
           </p>
         </div>
       )}

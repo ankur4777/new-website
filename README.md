@@ -145,6 +145,24 @@ Run the game-logic checks with:
 npm.cmd run test:game
 ```
 
+## Idea studio: requirements to an interactive concept
+
+The home page has a new **Try your idea** shortcut and an Idea studio section before Spark Catch. Visitors can describe a project, choose a service, add or remove features, choose a dark or warm-light theme, pick a design style, and select a preset or custom accent color.
+
+The preview is composed locally from five project layouts, industry content directions, and feature modules. It requires no external AI API, key or paid service. Text cues can suggest project type, features, theme, design style and colors; explicit choices take priority. It is a visual concept with sample content, rather than an arbitrary full website generator. User text is rendered through React as plain text.
+
+**Make my preview** shows a short code-writing transition (about 1.15 seconds), then an interactive preview. Try booking times, a sample shopping bag, a demo checkout, a member view, a scripted chat, and the other feature tabs. Desktop and phone previews are available. Reduced-motion preferences and the footer motion setting shorten the transition and disable decorative animation.
+
+After generating, **Get more. Make it real.** carries the exact preview requirements into the contact form using temporary session storage. Editing the inputs requires updating the preview before contacting, so the brief matches what the visitor saw. Stored handoffs expire after 24 hours. If browser storage is unavailable, a copyable brief and an enquiry-form link appear.
+
+Add the company's real `email` or international `whatsapp` number to `company` in `lib/studio-content.ts` to enable a direct contact link. WhatsApp takes priority when both are provided. The link opens a message containing the brief for the visitor to review and send. Until a real destination is configured, the existing local enquiry form prepares a downloadable brief and clearly states that delivery is not connected.
+
+Relevant files: `lib/project-concept.ts`, `components/studio/project-builder.tsx`, `app/project-builder.css`, and `components/studio/contact-form.tsx`.
+
+```powershell
+npm.cmd run test:concept
+```
+
 ## Signal Bloom controls
 
 The home page now includes **Signal Bloom** after the work collection. Its nineteen curved metallic petals are generated directly in code, with no downloaded 3D models, textures, or animation clips.

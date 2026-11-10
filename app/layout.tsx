@@ -4,6 +4,7 @@ import "@fontsource-variable/dm-sans";
 import "./globals.css";
 import "./design-studio.css";
 import "./spark-catch.css";
+import "./project-builder.css";
 import SiteShell from "@/components/studio/site-shell";
 import { company } from "@/lib/studio-content";
 export const metadata: Metadata = {
