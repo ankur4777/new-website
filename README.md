@@ -149,15 +149,19 @@ npm.cmd run test:game
 
 The home page has a new **Try your idea** shortcut and an Idea studio section before Spark Catch. Visitors can describe a project, choose a service, add or remove features, choose a dark or warm-light theme, pick a design style, and select a preset or custom accent color.
 
-The preview is composed locally from five project layouts, industry content directions, and feature modules. It requires no external AI API, key or paid service. Text cues can suggest project type, features, theme, design style and colors; explicit choices take priority. It is a visual concept with sample content, rather than an arbitrary full website generator. User text is rendered through React as plain text.
+The preview uses a local, procedural design engine with **14 composition families** and **15 industry content and illustration profiles**. The brief shapes its visual seed, typography, artwork, page copy, sections and feature modules. Explicit cues such as cinematic, bento, minimal or editorial influence composition; explicit theme, color and service controls take priority. It requires no external AI API, key or paid service. It creates visual concepts with sample content using the available design families. User text is rendered through React as plain text.
 
-**Make my preview** shows a short code-writing transition (about 1.15 seconds), then an interactive preview. Try booking times, a sample shopping bag, a demo checkout, a member view, a scripted chat, and the other feature tabs. Desktop and phone previews are available. Reduced-motion preferences and the footer motion setting shorten the transition and disable decorative animation.
+**Make my preview** shows a short code-writing transition (roughly 2–2.5 seconds), then opens a full preview. The display includes a complete visual page with a hero, supporting content, illustrated collections and a closing section, or a software workspace or mobile app experience. **Another direction** cycles through different compositions while keeping the brief, selected features and explicit colors intact. A direction ID identifies the exact composition that travels with the enquiry. The same brief and direction number reproduce the same result.
+
+The original SVG illustrations include café and food scenes, landscapes, architecture, skincare products, shopping products, learning material, fitness, care, finance, logistics and other subjects. They are drawn in code and served locally. No image download or external image service is needed. Dashboard directions include workspaces, a project board with a movable sample task, and analytics; mobile directions include a feed, a daily focus view and a collection with saveable items.
+
+Try booking times, a sample shopping bag, a demo checkout, a member view, a scripted chat, and the other feature tabs. Desktop and phone views are available inside the full preview. **Back to choices** or Escape closes it; keyboard focus stays inside while it is open. Reduced-motion preferences and the footer motion setting shorten the transition and disable decorative animation.
 
 After generating, **Get more. Make it real.** carries the exact preview requirements into the contact form using temporary session storage. Editing the inputs requires updating the preview before contacting, so the brief matches what the visitor saw. Stored handoffs expire after 24 hours. If browser storage is unavailable, a copyable brief and an enquiry-form link appear.
 
 Add the company's real `email` or international `whatsapp` number to `company` in `lib/studio-content.ts` to enable a direct contact link. WhatsApp takes priority when both are provided. The link opens a message containing the brief for the visitor to review and send. Until a real destination is configured, the existing local enquiry form prepares a downloadable brief and clearly states that delivery is not connected.
 
-Relevant files: `lib/project-concept.ts`, `components/studio/project-builder.tsx`, `app/project-builder.css`, and `components/studio/contact-form.tsx`.
+Relevant files: `lib/project-concept.ts`, `components/studio/project-builder.tsx`, `components/studio/concept-preview.tsx`, `components/studio/concept-illustration.tsx`, `app/project-builder.css`, `app/concept-preview.css`, and `components/studio/contact-form.tsx`.
 
 ```powershell
 npm.cmd run test:concept

@@ -67,3 +67,37 @@ test("long and markup-like input stays bounded plain text", () => {
   assert.ok(concept.idea.length <= 600);
   assert.ok(conceptBrief(concept).includes("<script>"));
 });
+
+test("different briefs carry distinct visual fingerprints, copy and industry artwork", () => {
+  const ideas=["A minimal café website with bookings","A cinematic travel website for hiking in the mountains","A luxury jewellery store in gold","A blue mobile app for learning","A dashboard for logistics with team tracking","A clean website for a skincare brand","A bold fitness website","A website for modern architecture","A website for a healthcare clinic","A website for community volunteers"];
+  const concepts=ideas.map(idea=>buildConcept(draft({idea})));
+  assert.equal(new Set(concepts.map(c=>c.design.id)).size,ideas.length);
+  assert.ok(new Set(concepts.map(c=>c.design.visual)).size>=8);
+  assert.ok(new Set(concepts.map(c=>c.design.layout)).size>=5);
+  assert.equal(concepts[0].design.visual,"coffee");
+  assert.equal(concepts[1].design.visual,"landscape");
+  assert.equal(concepts[1].design.layout,"immersive");
+  assert.notDeepEqual(concepts[0].headline,concepts[1].headline);
+});
+test("another direction changes composition while preserving the brief and explicit choices", () => {
+  const input=draft({name:"Test Studio",idea:"An independent creative website",theme:"dark",palette:"forest",features:["gallery"]});
+  const concepts=Array.from({length:7},(_,i)=>buildConcept(input,i));
+  assert.equal(new Set(concepts.map(c=>c.design.layout)).size,7);
+  assert.equal(new Set(concepts.map(c=>c.design.id)).size,7);
+  for(const c of concepts){assert.equal(c.name,input.name);assert.equal(c.theme,"dark");assert.equal(c.palette,"Forest / lime");assert.deepEqual(c.features,["gallery"]);}
+});
+test("explicit composition, brand name and headline cues shape the result", () => {
+  const c=buildConcept(draft({idea:'A minimal bento website for a café called "Cedar House". Use the headline "A table for everyone".'}));
+  assert.equal(c.design.layout,"bento");
+  assert.equal(c.name,"Cedar House");
+  assert.deepEqual(c.headline,["A table for everyone"]);
+  assert.ok(!c.design.description.includes(c.idea));
+});
+test("all directions are deterministic and the selected design travels with the enquiry", () => {
+  const input=draft({idea:"A restaurant website with bookings"});
+  assert.deepEqual(buildConcept(input,2),buildConcept(input,2));
+  const c=buildConcept(input,2);
+  assert.match(conceptBrief(c),new RegExp(c.design.id));
+  assert.ok(conceptBrief(c).includes(c.design.label));
+  assert.equal(buildConcept(input,NaN).design.variation,0);
+});

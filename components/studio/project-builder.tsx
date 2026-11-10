@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import { company } from "@/lib/studio-content";
 import { buildConcept, conceptBrief, conceptFeatures, conceptPalettes, CONCEPT_HANDOFF_KEY, createConceptHandoff, defaultConceptDraft, getEnquiryLink, projectKinds, readableInk, type ConceptDraft, type FeatureId, type ProjectConcept } from "@/lib/project-concept";
 import { AnimatedIcon } from "./animated-icon";
+import ConceptPreview from "./concept-preview";
+import ConceptIllustration from "./concept-illustration";
 
 const examples = [
   { label: "A café with bookings", text: "A light, minimal website for a café with online booking, a menu and a photo gallery. Use forest green.", name: "Gather" },
@@ -13,9 +16,10 @@ const examples = [
 const featureName = (id: FeatureId) => conceptFeatures.find((x) => x.id === id)!.label;
 type PreviewView = "overview" | "direction" | FeatureId;
 
-function ConceptArt({ small = false }: { small?: boolean }) {
-  return <div className={`pc-art ${small ? "pc-art-small" : ""}`} aria-hidden="true"><span/><span/><span/><i/></div>;
+function PreviewLayer({expanded,children}:{expanded:boolean;children:React.ReactNode}) {
+  return expanded?createPortal(children,document.body):children;
 }
+
 function SampleChart() {
   return <div className="pc-chart" aria-label="Sample activity chart"><div className="pc-chart-heading"><span>Activity overview</span><small>DEMO DATA · THIS WEEK</small></div><div className="pc-chart-bars">{[35, 56, 44, 77, 60, 91, 72].map((h, i) => <div key={i}><span style={{height:`${h}%`}}/><small>{["M","T","W","T","F","S","S"][i]}</small></div>)}</div></div>;
 }
@@ -29,12 +33,12 @@ function FeatureDemo({ view, concept }: { view: PreviewView; concept: ProjectCon
   const [question, setQuestion] = useState("");
   const [asked, setAsked] = useState("");
   if (view === "booking") return <div className="pc-feature-demo"><span className="pc-kicker">A LITTLE TIME FOR YOU</span><h3>Make room for<br/><em>something good.</em></h3><p>Try a sample booking journey.</p><div className="pc-days">{["Mon","Tue","Wed","Thu","Fri"].map((d,i)=><button key={d} onClick={()=>{setDay(d);setConfirmed(false);}} aria-pressed={day===d}>{d}<b>{12+i}</b></button>)}</div><div className="pc-slots">{["09:00","10:30","14:00"].map((s)=><button key={s} aria-pressed={slot===s} onClick={()=>{setSlot(s);setConfirmed(false);}}>{s}</button>)}</div><button className="pc-primary" onClick={()=>setConfirmed(true)}>{confirmed ? "Demo selection saved ✓" : "Try this time"}</button><p className="pc-demo-feedback" role="status">{confirmed ? `Your demo selection: ${day} at ${slot}.` : "Sample dates and availability"}</p></div>;
-  if (view === "shop") return <div className="pc-feature-demo"><div className="pc-module-title"><div><span className="pc-kicker">THE EVERYDAY EDIT</span><h3>A little considered.</h3></div><span className="pc-bag" aria-live="polite">Bag / {cart}</span></div><div className="pc-products">{["The essential","The original","The everyday"].map((name,i)=><article key={name}><div className={`pc-product-art art-${i}`}><ConceptArt small/></div><h4>{name}</h4><p>Sample product · ₹{[1200,1800,2400][i]}</p><button onClick={()=>setCart(cart+1)}>Add to demo bag <span>+</span></button></article>)}</div><p className="pc-demo-feedback" role="status">{cart ? `${cart} ${cart===1?"item":"items"} in your demo bag. Try a different feature above.` : "Explore a sample collection and try adding an item."}</p></div>;
+  if (view === "shop") return <div className="pc-feature-demo"><div className="pc-module-title"><div><span className="pc-kicker">THE EVERYDAY EDIT</span><h3>A little considered.</h3></div><span className="pc-bag" aria-live="polite">Bag / {cart}</span></div><div className="pc-products">{["The essential","The original","The everyday"].map((name,i)=><article key={name}><div className={`pc-product-art art-${i}`}><ConceptIllustration concept={concept} variant={i+1} compact/></div><h4>{name}</h4><p>Sample product · ₹{[1200,1800,2400][i]}</p><button onClick={()=>setCart(cart+1)}>Add to demo bag <span>+</span></button></article>)}</div><p className="pc-demo-feedback" role="status">{cart ? `${cart} ${cart===1?"item":"items"} in your demo bag. Try a different feature above.` : "Explore a sample collection and try adding an item."}</p></div>;
   if (view === "payments") return <div className="pc-feature-demo pc-payment"><span className="pc-kicker">A SIMPLE WAY TO COMPLETE</span><h3>One last<br/><em>little step.</em></h3><div className="pc-checkout-line"><span>Example order</span><b>₹1,200</b></div><div className="pc-payment-method"><AnimatedIcon name="check" size={16}/><span>Demo payment method</span><b>•••• 4242</b></div><button className="pc-primary" onClick={()=>setTried(true)}>{tried ? "Demo complete ✓" : "Try demo checkout"}</button><p className="pc-demo-feedback" role="status">{tried ? "Demo completed. No payment was processed." : "Interactive sample checkout"}</p></div>;
   if (view === "members") return <div className="pc-feature-demo pc-member"><span className="pc-member-avatar">{concept.name.charAt(0)}</span><span className="pc-kicker">A SPACE OF YOUR OWN</span><h3>{tried?"Good to see you, Alex.":"Your people. Connected."}</h3><p>{tried?"Your projects, saved items and conversations live here.":"Preview a simple member experience for your project."}</p>{tried&&<div className="pc-sample-stats"><span>Saved items<b>06</b></span><span>Messages<b>02</b></span></div>}<button className="pc-primary" onClick={()=>setTried(!tried)}>{tried?"Back to sign-in demo":"Open demo account"}</button><p className="pc-demo-feedback">Sample account · no sign-up required</p></div>;
   if (view === "dashboard" || view === "analytics") return <div className="pc-feature-demo"><span className="pc-kicker">THE BIGGER PICTURE</span><h3>Your day, at a glance.</h3><div className="pc-sample-stats"><span>Active projects<b>08</b></span><span>Tasks complete<b>24</b></span><span>This week<b>06</b></span></div><SampleChart/><p className="pc-demo-feedback">Illustrative figures for your concept</p></div>;
   if (view === "chat") return <div className="pc-feature-demo pc-chat"><span className="pc-kicker">A CONVERSATION STARTER</span><h3>A little help.<br/><em>Right here.</em></h3><div className="pc-chat-bubble">Welcome to {concept.name}. What would you like to explore?</div>{asked&&<><div className="pc-chat-bubble pc-chat-user">{asked}</div><div className="pc-chat-bubble">We can guide visitors through {concept.features.includes("booking")?"booking an appointment":concept.features.includes("shop")?"finding the right product":"your services"} and connect them with your team.</div></>}<form className="pc-chat-input" onSubmit={e=>{e.preventDefault();if(question.trim()){setAsked(question.trim());setQuestion("");}}}><input aria-label="Demo chat question" value={question} onChange={e=>setQuestion(e.target.value)} maxLength={140} placeholder="Ask a sample question…"/><button aria-label="Send demo question" type="submit"><AnimatedIcon name="arrow" size={16}/></button></form><p className="pc-demo-feedback">Scripted interaction preview</p></div>;
-  if (view === "gallery" || view === "articles") return <div className="pc-feature-demo"><span className="pc-kicker">ROOM FOR DISCOVERY</span><h3>{view==="gallery"?"A fresh perspective.":"A little worth exploring."}</h3><div className={`pc-content-grid ${view==="gallery"?"pc-gallery":""}`}>{concept.cards.map((text,i)=><article key={text}><div className={`pc-product-art art-${i}`}><ConceptArt small/></div><small>{view==="articles"?"INSIGHTS / 0":"SELECTED / 0"}{i+1}</small><h4>{text}</h4><p>{view==="articles"?"A place for your stories, insights and useful ideas.":"A space for the moments and work you want to share."}</p></article>)}</div></div>;
+  if (view === "gallery" || view === "articles") return <div className="pc-feature-demo"><span className="pc-kicker">ROOM FOR DISCOVERY</span><h3>{view==="gallery"?"A fresh perspective.":"A little worth exploring."}</h3><div className={`pc-content-grid ${view==="gallery"?"pc-gallery":""}`}>{concept.cards.map((text,i)=><article key={text}><div className={`pc-product-art art-${i}`}><ConceptIllustration concept={concept} variant={i+1} compact/></div><small>{view==="articles"?"INSIGHTS / 0":"SELECTED / 0"}{i+1}</small><h4>{text}</h4><p>{view==="articles"?"A place for your stories, insights and useful ideas.":"A space for the moments and work you want to share."}</p></article>)}</div></div>;
   if (view === "direction") return <div className="pc-feature-demo"><span className="pc-kicker">YOUR DIRECTION, CONNECTED</span><h3>{concept.name}</h3><p>{concept.idea || "A thoughtful digital experience shaped around your business and your audience."}</p><div className="pc-direction-list"><span>Project<b>{projectKinds.find(x=>x.id===concept.kind)!.label}</b></span><span>Look & feel<b>{concept.theme} / {concept.style}</b></span><span>Color direction<b>{concept.palette}</b></span>{concept.features.map(id=><span key={id}>{featureName(id)}<AnimatedIcon name="check" size={14}/></span>)}</div></div>;
   const detail: Partial<Record<FeatureId,{title:string;lines:string[];action:string}>> = {
     notifications:{title:"The right nudge. At the right time.",lines:["Your project is ready to review","A reminder for your next booking","Your team has a new update"],action:"Try a notification"},
@@ -49,25 +53,27 @@ function FeatureDemo({ view, concept }: { view: PreviewView; concept: ProjectCon
   return <div className="pc-feature-demo"><span className="pc-kicker">{featureName(view as FeatureId)}</span><h3>{content.title}</h3><div className="pc-workflow">{content.lines.map((line,i)=><div key={line}><span>0{i+1}</span><p>{line}</p><AnimatedIcon name="check" size={14}/></div>)}</div><button className="pc-primary" onClick={()=>setTried(!tried)}>{tried?"Back to feature":content.action}</button>{tried&&<div className="pc-feature-feedback" role="status"><b>{concept.name}</b><p>{view==="seo"?`${concept.name} — ${concept.headline.join(" ")}`:view==="notifications"?"Your next step is ready. Take a look when it suits you.":view==="social"?concept.headline.join(" "):"Your sample journey is connected. The team can tailor every step to your business."}</p></div>}</div>;
 }
 
-function ConceptPreview({ concept, device }: { concept: ProjectConcept; device: "desktop"|"mobile" }) {
-  const [view,setView]=useState<PreviewView>("overview");
-  const isDashboard=concept.kind==="webapp"||concept.kind==="software";
-  const phone=device==="mobile";
-  const styles={"--pc-accent":concept.accent,"--pc-secondary":concept.secondary,"--pc-ink":readableInk(concept.accent)} as CSSProperties;
-  const openFeature=()=>setView(concept.features[0]||"direction");
-  return <div className={`concept-canvas ${phone?"pc-phone":""}`} style={styles} data-theme={concept.theme} data-style={concept.style} data-kind={concept.kind}>
-    {phone&&<div className="pc-phone-status" aria-hidden="true"><span>9:41</span><i/><span>● ▰</span></div>}
-    <header className="pc-nav"><button className="pc-brand" onClick={()=>setView("overview")} aria-label={`Show ${concept.name} overview`}><span className="pc-brandmark"><AnimatedIcon name="studio" size={22}/></span>{concept.name}<span className="pc-brand-period">.</span></button><span className="pc-nav-label">{isDashboard?"YOUR WORKSPACE":concept.kind==="marketing"?"CAMPAIGN CONCEPT":"A FRESH PERSPECTIVE"}</span><button className="pc-nav-action" onClick={()=>setView("direction")} aria-label="View concept direction"><AnimatedIcon name="arrow" size={15}/></button></header>
-    <nav className="pc-feature-tabs" aria-label="Concept preview sections"><button aria-pressed={view==="overview"} onClick={()=>setView("overview")}>Overview</button>{concept.features.map(id=><button key={id} aria-pressed={view===id} onClick={()=>setView(id)}>{featureName(id)}</button>)}</nav>
-    <div className="pc-page-content">
-      {view!=="overview"?<FeatureDemo key={view} view={view} concept={concept}/>:isDashboard?<div className="pc-dashboard"><div className="pc-welcome"><span className="pc-kicker">LET’S MAKE ROOM FOR GOOD WORK</span><h3>Good morning, Alex<span>✳</span></h3><p>A clearer view of everything that matters.</p></div><div className="pc-sample-stats"><span>Projects<b>08<small>in motion</small></b></span><span>Tasks<b>24<small>completed</small></b></span><span>Team<b>06<small>connected</small></b></span></div><SampleChart/><div className="pc-dashboard-bottom"><div><span className="pc-kicker">YOUR SHORTCUTS</span>{(concept.features.length?concept.features.slice(0,3):["dashboard","team","automation"] as FeatureId[]).map(id=><button key={id} onClick={()=>setView(id)}>{featureName(id)}<AnimatedIcon name="arrow" size={13}/></button>)}</div><div className="pc-focus-note"><AnimatedIcon name="studio" size={27}/><p>Less friction.<br/><b>More possibility.</b></p><span>DEMO WORKSPACE</span></div></div></div>:concept.kind==="marketing"?<div className="pc-campaign"><span className="pc-kicker">YOUR NEXT CONVERSATION STARTS HERE</span><h3>A brighter story.<br/><em>A bigger connection.</em></h3><p>{concept.idea||"A connected campaign built around your brand, your audience and your next ambition."}</p><div className="pc-campaign-layout"><div className="pc-social-preview"><div><span className="pc-avatar">{concept.name.charAt(0)}</span><b>{concept.name}</b><small>Sponsored · sample creative</small></div><div className="pc-social-art"><ConceptArt small/><h4>{concept.headline.join(" ")}</h4></div><p>A fresh perspective from {concept.name}.</p></div><div className="pc-campaign-plan"><span className="pc-kicker">A CONNECTED JOURNEY</span>{["Discover","Engage","Convert"].map((s,i)=><button key={s} onClick={()=>setView(concept.features[i]||"direction")}><span>0{i+1}</span><b>{s}</b><AnimatedIcon name="arrow" size={13}/></button>)}</div></div></div>:<><div className="pc-landing-hero"><div><span className="pc-kicker">{concept.industry==="business"?"THOUGHTFULLY MADE. FOR WHAT’S NEXT.":"A LITTLE MORE POSSIBILITY."}</span><h3>{concept.headline[0]}<br/><em>{concept.headline[1]}</em></h3><p>{concept.idea||"A considered experience for your people, your purpose and your next big thing."}</p><button className="pc-primary" onClick={openFeature}>{concept.action}<AnimatedIcon name="arrow" size={14}/></button></div><ConceptArt/></div><div className="pc-home-cards">{concept.cards.map((text,i)=><button key={text} onClick={()=>setView(concept.features[i]||"direction")}><span>0{i+1}</span><h4>{text}</h4><AnimatedIcon name="arrow" size={14}/></button>)}</div></>}
-    </div>
-    <footer className="pc-footer"><span>{concept.name} · A little more possible.</span><span>INTERACTIVE CONCEPT / SAMPLE CONTENT</span></footer>
-  </div>;
-}
 
 function codeFor(concept: ProjectConcept) {
-  return `// a little idea, taking shape\n\nconst project = {\n  name: ${JSON.stringify(concept.name)},\n  type: ${JSON.stringify(concept.kind)},\n  theme: ${JSON.stringify(concept.theme)},\n  accent: ${JSON.stringify(concept.accent)},\n  style: ${JSON.stringify(concept.style)},\n  features: [\n${concept.features.map(id=>`    ${JSON.stringify(featureName(id))},`).join("\n")}\n  ]\n};\n\ncompose.layout(project);\nconnect.interactions();\n\n// ready for your next big thing ✳`;
+  return [
+    "// your brief, becoming a visual direction",
+    "",
+    "const direction = {",
+    "  brand: " + JSON.stringify(concept.name) + ",",
+    "  composition: " + JSON.stringify(concept.design.layout) + ",",
+    "  artwork: " + JSON.stringify(concept.design.visual) + ",",
+    "  typography: " + JSON.stringify(concept.design.font) + ",",
+    "  theme: " + JSON.stringify(concept.theme) + ",",
+    "  accent: " + JSON.stringify(concept.accent) + ",",
+    "  signature: " + JSON.stringify(concept.design.id),
+    "};",
+    "",
+    "compose.hero(direction);",
+    "compose.story(" + JSON.stringify(concept.design.storyTitle) + ");",
+    ...concept.features.map(id => "connect." + id + "();"),
+    "",
+    "// considered details. a different perspective."
+  ].join("\\n");
 }
 
 export default function ProjectBuilder() {
@@ -77,6 +83,8 @@ export default function ProjectBuilder() {
   const [generated,setGenerated]=useState(false);
   const [signature,setSignature]=useState("");
   const [revision,setRevision]=useState(0);
+  const [direction,setDirection]=useState(0);
+  const [expanded,setExpanded]=useState(false);
   const [device,setDevice]=useState<"desktop"|"mobile">("desktop");
   const [building,setBuilding]=useState(false);
   const [progress,setProgress]=useState(0);
@@ -87,6 +95,24 @@ export default function ProjectBuilder() {
   const preview=useRef<HTMLDivElement>(null);
   const previewTitle=useRef<HTMLHeadingElement>(null);
   useEffect(()=>{setHydrated(true);return()=>{if(timer.current)clearInterval(timer.current);};},[]);
+  useEffect(()=>{
+    if(!expanded)return;
+    const previousFocus=document.activeElement as HTMLElement|null;
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow="hidden";
+    preview.current?.querySelector<HTMLButtonElement>(".idea-return-choices")?.focus();
+    const keys=(e:KeyboardEvent)=>{
+      if(e.key==="Escape"){e.preventDefault();setExpanded(false);}
+      if(e.key!=="Tab")return;
+      const nodes=Array.from(preview.current?.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]')||[]).filter(node=>node.offsetParent!==null);
+      const first=nodes[0],last=nodes[nodes.length-1];
+      if(!first)return;
+      if(e.shiftKey&&(document.activeElement===first||!preview.current?.contains(document.activeElement))){e.preventDefault();last.focus();}
+      else if(!e.shiftKey&&(document.activeElement===last||!preview.current?.contains(document.activeElement))){e.preventDefault();first.focus();}
+    };
+    document.addEventListener("keydown",keys);
+    return()=>{document.body.style.overflow=previousOverflow;document.removeEventListener("keydown",keys);previousFocus?.focus({preventScroll:true});};
+  },[expanded]);
   const proposed=buildConcept(draft);
   const kind=proposed.kind;
   const availableFeatures=conceptFeatures.filter(x=>x.kinds.includes(kind)||proposed.features.includes(x.id));
@@ -98,17 +124,18 @@ export default function ProjectBuilder() {
     const active=proposed.features.includes(id);
     setDraft(current=>({...current,features:active?current.features.filter(x=>x!==id):[...current.features,id],excludedFeatures:active?[...current.excludedFeatures,id]:current.excludedFeatures.filter(x=>x!==id)}));
   }
-  function generate(e:React.FormEvent) {
-    e.preventDefault(); if(building)return;
-    const next=buildConcept(draft), source=codeFor(next), savedSignature=JSON.stringify(draft);
+  function generate(e?:React.FormEvent) {
+    e?.preventDefault(); if(building)return;
+    const savedSignature=JSON.stringify(draft);
+    const next=buildConcept(draft,signature===savedSignature?direction+1:0), source=codeFor(next);
     const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches||document.documentElement.dataset.motion==="off";
     setBuilding(true);setProgress(0);setCode("");setHandoffError(false);setAnnouncement("Composing your concept.");
-    preview.current?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"start"});
-    const start=performance.now(), duration=reduced?180:1150;
+    if(!expanded)preview.current?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"start"});
+    const start=performance.now(), duration=reduced?180:1900+(next.design.seed%650);
     timer.current=setInterval(()=>{
       const p=Math.min(1,(performance.now()-start)/duration);
       setProgress(p);setCode(source.slice(0,Math.ceil(source.length*p)));
-      if(p===1){if(timer.current)clearInterval(timer.current);timer.current=null;setConcept(next);setDevice(next.kind==="mobile"?"mobile":"desktop");setGenerated(true);setSignature(savedSignature);setRevision(x=>x+1);setBuilding(false);setAnnouncement(`${projectKinds.find(x=>x.id===next.kind)!.label} concept ready. Explore the preview, refine your choices or discuss it with us.`);previewTitle.current?.focus({preventScroll:true});}
+      if(p===1){if(timer.current)clearInterval(timer.current);timer.current=null;setConcept(next);setDirection(next.design.variation);setDevice(next.kind==="mobile"?"mobile":"desktop");setGenerated(true);setSignature(savedSignature);setRevision(x=>x+1);setBuilding(false);setExpanded(true);setAnnouncement(`${projectKinds.find(x=>x.id===next.kind)!.label} concept ready in the ${next.design.label} direction. Explore the full preview, try another direction or return to your choices.`);previewTitle.current?.focus({preventScroll:true});}
     },24);
   }
   function handoff(e:React.MouseEvent<HTMLAnchorElement>) {
@@ -130,11 +157,14 @@ export default function ProjectBuilder() {
         </fieldset>
         <button type="submit" className="idea-generate" disabled={!hydrated||building}><AnimatedIcon name={building?"code":"burst"} size={19}/><span>{!hydrated?"Opening idea studio…":building?"A little possibility, loading…":generated?"Update my preview":"Make my preview"}</span><AnimatedIcon name="arrow" size={18}/></button><p className="idea-local-note">A visual starting point, composed in your browser.</p>
       </form>
-      <div ref={preview} className="idea-preview-panel">
-        <div className="idea-preview-heading"><div><span className={`idea-ready-dot ${building?"is-building":""}`}/><h3 ref={previewTitle} tabIndex={-1}>{building?"An idea in motion…":generated?"Your direction, visualised.":"A little glimpse of what’s possible."}</h3></div><div className="idea-device-switch" role="group" aria-label="Preview screen size"><button type="button" disabled={building} onClick={()=>setDevice("desktop")} aria-pressed={device==="desktop"} aria-label="Desktop preview"><AnimatedIcon name="web" size={17}/></button><button type="button" disabled={building} onClick={()=>setDevice("mobile")} aria-pressed={device==="mobile"} aria-label="Mobile preview"><AnimatedIcon name="mobile" size={17}/></button></div></div>
+      <PreviewLayer expanded={expanded}>
+      {expanded&&<div className="idea-full-preview-scrim" aria-hidden="true" onClick={()=>setExpanded(false)}/>}
+      <div ref={preview} className={`idea-preview-panel ${expanded?"is-expanded":""}`} role={expanded?"dialog":undefined} aria-modal={expanded?true:undefined} aria-labelledby={expanded?"idea-preview-title":undefined}>
+        <div className="idea-preview-heading"><div><span className={`idea-ready-dot ${building?"is-building":""}`}/><h3 id="idea-preview-title" ref={previewTitle} tabIndex={-1}>{building?"An idea in motion…":generated?"Your idea, considered.":"A little glimpse of what’s possible."}</h3></div>{expanded?<button aria-label="Back to choices" className="idea-return-choices" onClick={()=>setExpanded(false)}><AnimatedIcon name="close" size={14}/><span>Back to choices</span></button>:null}<div className="idea-device-switch" role="group" aria-label="Preview screen size"><button type="button" disabled={building} onClick={()=>setDevice("desktop")} aria-pressed={device==="desktop"} aria-label="Desktop preview"><AnimatedIcon name="web" size={17}/></button><button type="button" disabled={building} onClick={()=>setDevice("mobile")} aria-pressed={device==="mobile"} aria-label="Mobile preview"><AnimatedIcon name="mobile" size={17}/></button>{!expanded&&<button className="idea-expand-button" disabled={building} onClick={()=>setExpanded(true)} aria-label="Open full preview"><AnimatedIcon name="layers" size={15}/><span>Full preview</span></button>}</div></div>
+        <div className="idea-direction-bar"><div><span>{generated?`DIRECTION ${String(direction+1).padStart(2,"0")} / ${concept.design.id}`:"AN EXAMPLE DIRECTION"}</span><strong>{concept.design.label}</strong></div><button type="button" onClick={()=>generate()} disabled={!generated||dirty||building}><AnimatedIcon name="reset" size={13}/>Another direction</button></div>
         <div className="idea-browser-bar"><span><i/><i/><i/></span><span><AnimatedIcon name="code" size={12}/>{generated?concept.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"your-project":"your-next-idea"} / concept</span><span>{generated?"YOUR CONCEPT":"EXAMPLE CONCEPT"}</span></div>
         <div className={`idea-preview-stage ${building?"is-building":""}`} aria-busy={building}>
-          <ConceptPreview key={revision} concept={concept} device={device}/>
+          <ConceptPreview key={revision} concept={concept} device={device} renderFeature={(view)=><FeatureDemo key={`${revision}-${view}`} view={view} concept={concept}/>}/>
           {building&&<div className="idea-building"><div className="idea-build-grid"/><div className="idea-build-top"><AnimatedIcon name="code" size={24}/><span>A LITTLE IDEA, TAKING SHAPE</span><b>{Math.round(progress*100)}%</b></div><div className="idea-code-window" aria-hidden="true"><span>your-possibility.tsx <i>●</i></span><pre><code>{code}<span className="idea-code-cursor">▌</span></code></pre></div><div className="idea-build-steps">{["Reading the direction","Shaping the layout","Connecting the details","Ready for your curiosity"].map((text,i)=><span key={text} className={phase>=i?"active":""}><i>{phase>i?"✓":`0${i+1}`}</i>{text}</span>)}</div><div className="idea-build-progress" role="progressbar" aria-label="Preparing project concept" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress*100)}><span style={{width:`${progress*100}%`}}/></div></div>}
         </div>
         <div className="idea-preview-summary"><span className="idea-summary-kicker">{dirty?"YOUR CHOICES HAVE CHANGED · UPDATE TO SEE THEM":generated?"SHAPED AROUND YOUR IDEA":"CHOOSE A DIRECTION ON THE LEFT TO MAKE IT YOURS"}</span><div className="idea-summary-tags"><span>{projectKinds.find(x=>x.id===concept.kind)!.label}</span><span>{concept.theme} / {concept.style}</span><span><i style={{background:concept.accent}}/>{concept.palette}</span>{concept.features.slice(0,3).map(id=><span key={id}>{featureName(id)}</span>)}{concept.features.length>3&&<span>+{concept.features.length-3} more</span>}</div><p>Explore the feature tabs inside the preview. Every detail is a conversation starter.</p></div>
@@ -142,6 +172,7 @@ export default function ProjectBuilder() {
         {handoffError&&<div className="idea-handoff-error" role="alert"><p>Your browser could not carry the brief to the next page. Copy the details below, then open the enquiry form.</p><textarea readOnly aria-label="Your concept brief to copy" value={conceptBrief(concept)} rows={5}/><a className="text-link" href="/contact">Open enquiry form <AnimatedIcon name="arrow" size={14}/></a></div>}
         <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
       </div>
+      </PreviewLayer>
     </div>
   </section>;
 }
