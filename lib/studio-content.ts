@@ -26,7 +26,7 @@ export const services: Service[] = [
     headline: ["Attention is earned.", "Let’s earn yours."],
     description:
       "Bring your brand into the right conversations. We connect strategy, creative, and performance to help the right people discover what you do.",
-    accent: "#c3abff",
+    accent: "var(--accent)",
     icon: "growth",
     tags: ["SEO", "Social media", "Paid campaigns", "Content"],
     capabilities: [
@@ -80,7 +80,7 @@ export const services: Service[] = [
     headline: ["More than a website.", "Your next advantage."],
     description:
       "Thoughtful design meets purposeful engineering. We build fast, expressive websites that make your business easier to understand and easier to choose.",
-    accent: "#9ce7db",
+    accent: "var(--mint)",
     icon: "web",
     tags: ["Business websites", "E-commerce", "CMS", "Landing pages"],
     capabilities: [
@@ -134,7 +134,7 @@ export const services: Service[] = [
     headline: ["Big functionality.", "Beautifully simple."],
     description:
       "Turn a business idea into a product people enjoy using. From customer portals to SaaS platforms, we make complex workflows feel clear and connected.",
-    accent: "#a7bcff",
+    accent: "var(--service-blue)",
     icon: "layers",
     tags: ["SaaS platforms", "Dashboards", "Customer portals", "APIs"],
     capabilities: [
@@ -188,7 +188,7 @@ export const services: Service[] = [
     headline: ["Your business is unique.", "Your software can be too."],
     description:
       "Replace workarounds with tools that fit. We design custom software that connects processes, reduces repetitive work, and supports your next stage.",
-    accent: "#ffc495",
+    accent: "var(--service-warm)",
     icon: "code",
     tags: ["Custom software", "Business tools", "Automation", "Integrations"],
     capabilities: [
@@ -242,7 +242,7 @@ export const services: Service[] = [
     headline: ["A little screen.", "A world of possibility."],
     description:
       "Make the everyday feel effortless. We create mobile app experiences that bring your service closer to the people who need it.",
-    accent: "#ffb8d3",
+    accent: "var(--service-rose)",
     icon: "mobile",
     tags: ["iOS", "Android", "Cross-platform", "Product design"],
     capabilities: [

@@ -134,6 +134,23 @@ export default function Scene({
         const pink = new THREE.PointLight(0xf0a4ff, 25);
         pink.position.set(3, -2, -1);
         scene.add(pink);
+        const palette = () => {
+          const css = getComputedStyle(document.documentElement);
+          const primary = css.getPropertyValue("--accent").trim();
+          const secondary = css.getPropertyValue("--mint").trim();
+          material.color.set(primary);
+          key.color.set(primary);
+          fill.color.set(secondary);
+          satellite.material.color.set(primary);
+          satellite.material.emissive.set(primary);
+          satellite2.material.color.set(secondary);
+          satellite2.material.emissive.set(secondary);
+          (rings[0].material as InstanceType<typeof THREE.MeshBasicMaterial>).color.set(primary);
+          (rings[1].material as InstanceType<typeof THREE.MeshBasicMaterial>).color.set(secondary);
+        };
+        palette();
+        const paletteObserver = new MutationObserver(palette);
+        paletteObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-palette"] });
         const clock = new THREE.Clock();
         let frame = 0,
           pointerX = 0,
@@ -198,6 +215,7 @@ export default function Scene({
         setReady(true);
         cleanup = () => {
           cancelAnimationFrame(frame);
+          paletteObserver.disconnect();
           observer.disconnect();
           visibility.disconnect();
           el.removeEventListener("pointermove", move);

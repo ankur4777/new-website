@@ -17,9 +17,10 @@ import {
   Zap,
 } from "lucide-react";
 import { useState } from "react";
+import { AnimatedIcon, type IconName } from "./animated-icon";
 import { services, projects, processSteps, faqs } from "@/lib/studio-content";
 export const Arrow = ({ down = false }: { down?: boolean }) =>
-  down ? <ArrowDown size={18} /> : <ArrowUpRight size={19} />;
+  <AnimatedIcon name={down ? "down" : "arrow"} size={down ? 18 : 19} />;
 export function Button({
   href,
   children,
@@ -57,15 +58,7 @@ export function Eyebrow({
   );
 }
 export function Icon({ name, size = 25 }: { name: string; size?: number }) {
-  const map = {
-    growth: BarChart3,
-    web: Globe2,
-    layers: Layers,
-    code: Code2,
-    mobile: Smartphone,
-  };
-  const I = map[name as keyof typeof map] || Command;
-  return <I size={size} strokeWidth={1.4} />;
+  return <AnimatedIcon name={name as IconName} size={size} />;
 }
 export function ServicesList({ compact = false }: { compact?: boolean }) {
   return (
@@ -111,7 +104,7 @@ export function Process({ full = false }: { full?: boolean }) {
         >
           <span className="process-number">
             /{p.number}
-            <ArrowRight size={18} />
+            <AnimatedIcon name="arrow" size={18} />
           </span>
           <h3>
             {p.name}
@@ -119,7 +112,7 @@ export function Process({ full = false }: { full?: boolean }) {
           </h3>
           <p>{p.description}</p>
           <span className="process-output">
-            <Check size={13} />
+            <AnimatedIcon name="check" size={13} />
             {p.output}
           </span>
         </button>

@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { company, services } from "@/lib/studio-content";
 import { Icon } from "./ui";
+import { AnimatedIcon, type IconName } from "./animated-icon";
+import PalettePicker from "./palette-picker";
 
 export default function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -111,6 +113,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
           </Link>
           <div className="desktop-nav">
             <Link className={pathname === "/" ? "active" : ""} href="/">
+              <AnimatedIcon name="home" size={16} />
               Home
             </Link>
             <div className="nav-dropdown">
@@ -120,6 +123,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
                 aria-expanded={expertise}
                 aria-controls="expertise-menu"
               >
+                <AnimatedIcon name="layers" size={16} />
                 Expertise
                 <ChevronDown size={13} className={expertise ? "rotate" : ""} />
               </button>
@@ -150,23 +154,27 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
               className={pathname.startsWith("/work") ? "active" : ""}
               href="/work"
             >
+              <AnimatedIcon name="work" size={16} />
               Our work
             </Link>
             <Link
               className={pathname === "/about" ? "active" : ""}
               href="/about"
             >
+              <AnimatedIcon name="studio" size={16} />
               The studio
             </Link>
             <Link
               className={pathname === "/process" ? "active" : ""}
               href="/process"
             >
+              <AnimatedIcon name="process" size={16} />
               Our approach
             </Link>
           </div>
           <div className="nav-right">
             <Link href="/contact" className="nav-contact">
+              <AnimatedIcon name="contact" size={17} />
               Let’s talk <ArrowUpRight size={16} />
             </Link>
             <button
@@ -175,7 +183,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
               aria-label={menu ? "Close menu" : "Open menu"}
               aria-expanded={menu}
             >
-              {menu ? <X size={23} /> : <Menu size={23} />}
+              <AnimatedIcon name={menu ? "close" : "menu"} size={23} />
             </button>
           </div>
         </nav>
@@ -192,14 +200,15 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
             ["Let’s talk", "/contact"],
           ].map(([l, h], i) => (
             <Link key={h} href={h}>
-              <span>0{i + 1}</span>
+              <span className="mobile-nav-icon"><AnimatedIcon name={(["home", "layers", "work", "studio", "process", "contact"] as IconName[])[i]} size={23} /></span>
               {l}
-              <ArrowUpRight />
+              <AnimatedIcon name="arrow" />
             </Link>
           ))}
           <div className="mobile-service-links">
             {services.map((s) => (
               <Link href={`/services/${s.slug}`} key={s.slug}>
+                <Icon name={s.icon} size={16} />
                 {s.name}
                 <ArrowUpRight size={13} />
               </Link>
@@ -226,7 +235,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
               <span>Let’s make it happen.</span>
             </h2>
             <span className="cta-circle">
-              <MoveUpRight />
+              <AnimatedIcon name="arrow" />
             </span>
           </Link>
         </section>
@@ -254,15 +263,16 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
             </div>
             <div>
               <span className="footer-heading">EXPLORE</span>
-              <Link href="/about">The studio</Link>
-              <Link href="/work">Our work</Link>
-              <Link href="/process">Our approach</Link>
-              <Link href="/faq">Good questions</Link>
+              <Link href="/about"><AnimatedIcon name="studio" size={14} />The studio</Link>
+              <Link href="/work"><AnimatedIcon name="work" size={14} />Our work</Link>
+              <Link href="/process"><AnimatedIcon name="process" size={14} />Our approach</Link>
+              <Link href="/faq"><AnimatedIcon name="contact" size={14} />Good questions</Link>
             </div>
             <div>
               <span className="footer-heading">OUR EXPERTISE</span>
               {services.map((s) => (
                 <Link key={s.slug} href={`/services/${s.slug}`}>
+                  <Icon name={s.icon} size={14} />
                   {s.name}
                 </Link>
               ))}
@@ -271,7 +281,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
               <span className="footer-heading">LET’S CONNECT</span>
               <Link className="footer-contact" href="/contact">
                 Start something good
-                <ArrowUpRight size={16} />
+                <AnimatedIcon name="arrow" size={16} />
               </Link>
               <p>
                 Bring your idea.
@@ -296,6 +306,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </footer>
+      <PalettePicker />
     </>
   );
 }

@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { services } from "@/lib/studio-content";
-import { ArrowUpRight, Check, Download, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { AnimatedIcon } from "./animated-icon";
+import { Icon } from "./ui";
 type Brief = {
   name: string;
   email: string;
@@ -72,9 +74,10 @@ export default function ContactForm() {
                   setError("");
                 }}
               >
+                <Icon name={s.icon} size={17} />
                 {s.name}
                 {selected.includes(s.slug) ? (
-                  <Check size={14} />
+                  <AnimatedIcon name="check" size={14} />
                 ) : (
                   <span>+</span>
                 )}
@@ -169,7 +172,7 @@ export default function ContactForm() {
         <div className="contact-submit">
           <button className="button button-primary" type="submit">
             <span>Prepare my project brief</span>
-            <ArrowUpRight size={18} />
+            <AnimatedIcon name="arrow" size={18} />
           </button>
           <p>
             UI preview · Your details stay in this page.
@@ -181,7 +184,7 @@ export default function ContactForm() {
       {brief && (
         <div className="brief-success" role="status">
           <span className="success-icon">
-            <Check size={32} />
+            <AnimatedIcon name="check" size={32} />
           </span>
           <span className="eyebrow">A GOOD IDEA HAS A STARTING POINT.</span>
           <h2>
@@ -202,7 +205,7 @@ export default function ContactForm() {
           <div className="brief-actions">
             <button className="button button-primary" onClick={download}>
               Download your brief
-              <Download size={17} />
+              <AnimatedIcon name="download" size={17} />
             </button>
             <button className="text-link" onClick={() => setBrief(null)}>
               <ArrowLeft size={16} />

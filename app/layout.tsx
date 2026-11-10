@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@fontsource-variable/manrope";
 import "@fontsource-variable/dm-sans";
 import "./globals.css";
+import "./design-studio.css";
 import SiteShell from "@/components/studio/site-shell";
 import { company } from "@/lib/studio-content";
 export const metadata: Metadata = {

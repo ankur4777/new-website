@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Scene from "@/components/studio/scene";
+import SignalBloom from "@/components/studio/signal-bloom";
+import { AnimatedIcon } from "@/components/studio/animated-icon";
 import {
   Arrow,
   Button,
@@ -10,7 +12,6 @@ import {
   TechnologyRibbon,
   Accordion,
 } from "@/components/studio/ui";
-import { MoveDown, Sparkles, Code2, Asterisk } from "lucide-react";
 export default function Home() {
   return (
     <>
@@ -52,13 +53,13 @@ export default function Home() {
             <span className="scene-eyebrow">IDEAS IN MOTION / 001</span>
             <Scene />
             <span className="floating-note note-strategy">
-              <span>✷</span>
+              <AnimatedIcon name="studio" size={27} />
               <div>
                 Different by design.<small>CONNECTED BY TECHNOLOGY</small>
               </div>
             </span>
             <span className="floating-note note-code">
-              <Code2 size={15} />
+              <AnimatedIcon name="code" size={15} />
               More than the ordinary.
             </span>
             <span className="art-caption">
@@ -70,14 +71,14 @@ export default function Home() {
         <div className="hero-bottom">
           <Link href="#what-we-do" className="scroll-link">
             <span className="scroll-icon">
-              <MoveDown size={17} />
+              <AnimatedIcon name="down" size={17} />
             </span>
             GOOD THINGS BELOW
           </Link>
           <p>
             Your vision. Our curiosity. <span>Something extraordinary.</span>
           </p>
-          <span className="hero-scroll-index">SCROLL TO DISCOVER&nbsp; ↘</span>
+          <Link className="hero-scroll-index playground-shortcut" href="#playground">TRY THE CURSOR PLAYGROUND <AnimatedIcon name="down" size={13}/></Link>
         </div>
       </section>
       <TechnologyRibbon />
@@ -122,6 +123,7 @@ export default function Home() {
         </div>
         <WorkGrid home />
       </section>
+      <SignalBloom />
       <section className="studio-teaser section-wrap section-space">
         <div className="studio-visual reveal">
           <div className="grid-plane" />
