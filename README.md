@@ -122,7 +122,30 @@ Click **Color studio** in the bottom-right corner of any page. Each option previ
 
 Violet remains the default until you choose a direction. To change the default for new visitors, update `defaultPalette` in `lib/palettes.ts` to `violet`, `cobalt`, `emerald`, `coral`, `amber`, or `rose`. The picker is a design-review control; it can be removed from `site-shell.tsx` when the final brand colors are selected.
 
-## Play with Signal Bloom
+## New: warm-white sections and Spark Catch
+
+The services and FAQ sections now use warm-white backgrounds, dark readable text, and darker versions of the selected brand accents. The hero, portfolio, studio content, and 3D artwork retain their dark backgrounds.
+
+**Spark Catch** is a small playable 3D arcade after the services section. It uses CSS perspective and six-sided cubes, so it also works without WebGL.
+
+- Start a 30-second round with **Play a round**. The game never starts automatically.
+- Move the cursor, drag horizontally on touch, or focus the board and use Left/Right to move the catcher.
+- Catch bright cubes marked with a spark for points. Longer streaks earn up to a 3× multiplier.
+- Avoid coral cubes marked with a cross. Catching one costs a life and five points; missing an ordinary spark only resets the streak.
+- Pause with the button or Space while the board is focused. Resume keeps the current time and score. The game pauses when the tab is hidden, the browser loses focus, or the board leaves the viewport.
+- Rounds end after 30 seconds or three glitches. The result screen shows your score and offers replay.
+- Personal best is saved only in the visitor’s browser. No account, server, or tracking service is involved.
+- Reduced-motion preferences disable decorative spinning. Essential game movement starts only after the visitor chooses to play.
+
+The rules and scoring simulation are in `lib/spark-game.ts`, the renderer and controls in `components/studio/spark-catch.tsx`, and the new styling in `app/spark-catch.css`.
+
+Run the game-logic checks with:
+
+```powershell
+npm.cmd run test:game
+```
+
+## Signal Bloom controls
 
 The home page now includes **Signal Bloom** after the work collection. Its nineteen curved metallic petals are generated directly in code, with no downloaded 3D models, textures, or animation clips.
 

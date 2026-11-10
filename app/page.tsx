@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Scene from "@/components/studio/scene";
 import SignalBloom from "@/components/studio/signal-bloom";
+import SparkCatch from "@/components/studio/spark-catch";
 import { AnimatedIcon } from "@/components/studio/animated-icon";
 import {
   Arrow,
@@ -78,10 +79,11 @@ export default function Home() {
           <p>
             Your vision. Our curiosity. <span>Something extraordinary.</span>
           </p>
-          <Link className="hero-scroll-index playground-shortcut" href="#playground">TRY THE CURSOR PLAYGROUND <AnimatedIcon name="down" size={13}/></Link>
+          <Link className="hero-scroll-index playground-shortcut" href="#spark-catch">PLAY A LITTLE SPARK CATCH <AnimatedIcon name="down" size={13}/></Link>
         </div>
       </section>
       <TechnologyRibbon />
+      <div className="light-band light-services">
       <section className="section-wrap section-space" id="what-we-do">
         <div className="section-intro reveal">
           <Eyebrow number="01 / 05">A CONNECTED KIND OF EXPERTISE</Eyebrow>
@@ -106,6 +108,8 @@ export default function Home() {
         </div>
         <ServicesList />
       </section>
+      </div>
+      <SparkCatch />
       <section className="work-section section-wrap section-space">
         <div className="section-heading reveal">
           <div>
@@ -180,6 +184,7 @@ export default function Home() {
         </div>
         <Process />
       </section>
+      <div className="light-band light-faq">
       <section className="faq-home section-wrap section-space">
         <div className="reveal">
           <Eyebrow number="05 / 05">A GOOD PLACE TO START</Eyebrow>
@@ -210,6 +215,7 @@ export default function Home() {
           ]}
         />
       </section>
+      </div>
     </>
   );
 }
