@@ -70,16 +70,16 @@ export default function Home() {
           </div>
         </div>
         <div className="hero-bottom">
-          <Link href="#what-we-do" className="scroll-link">
+          <a href="#what-we-do" className="scroll-link">
             <span className="scroll-icon">
               <AnimatedIcon name="down" size={17} />
             </span>
             GOOD THINGS BELOW
-          </Link>
+          </a>
           <p>
             Your vision. Our curiosity. <span>Something extraordinary.</span>
           </p>
-          <Link className="hero-scroll-index playground-shortcut" href="#spark-catch">PLAY A LITTLE SPARK CATCH <AnimatedIcon name="down" size={13}/></Link>
+          <a className="hero-scroll-index playground-shortcut" href="#spark-catch">PLAY A LITTLE SPARK CATCH <AnimatedIcon name="down" size={13}/></a>
         </div>
       </section>
       <TechnologyRibbon />
