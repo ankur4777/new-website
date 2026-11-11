@@ -63,6 +63,9 @@
 .rule-token { width: 31px; height: 31px; border-radius: 8px; display: grid; place-items: center; flex-shrink: 0; font: 22px/1 var(--font-heading); }
 .token-good { color: var(--mint); border: 1px solid color-mix(in srgb,var(--mint) 30%,transparent); background: color-mix(in srgb,var(--mint) 7%,transparent); }
 .token-glitch { color: #f4a0a5; border: 1px solid #f4a0a52b; background: #f4a0a50a; }
+.token-time { color: #f6d782; border: 1px solid #f6d7824d; background: #f6d78212; }
+.spark-time-values { display: flex; gap: 5px; margin-top: 8px; }
+.spark-time-values > span { border: 1px solid #f6d78233; border-radius: 5px; padding: 3px 6px; color: #f6d782; background: #f6d7820a; font: 9px monospace; }
 .spark-rule b { display: block; font-size: 11px; font-weight: 500; color: #d6d6df; margin-top: 1px; }
 .spark-rule small { display: block; font-size: 10px; color: var(--muted); line-height: 1.8; max-width: 260px; margin-top: 4px; }
 .spark-inputs { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; margin-top: 29px; max-width: 330px; color: #8e919e; font-size: 9px; }
@@ -80,9 +83,12 @@
 .spark-arcade-top b { font-weight: 500; color: #e2e2ed; font-size: 11px; margin-left: 7px; font-variant-numeric: tabular-nums; }
 .spark-hud { display: grid; grid-template-columns: 1fr 1fr 1fr .6fr; align-items: center; padding: 19px 25px 14px; gap: 20px; position: relative; z-index: 3; background: linear-gradient(#0e121b,#0e121b00); }
 .spark-hud > div > span { display: block; font: 6px monospace; letter-spacing: .12em; color: #798397; }
+.spark-hud > div { position: relative; }
 .spark-hud b { font: 500 29px/1.2 var(--font-heading); letter-spacing: -.05em; display: block; margin-top: 4px; font-variant-numeric: tabular-nums; }
 .spark-hud b small { font: 12px var(--font-body); color: #798397; margin-left: 3px; }
 .spark-hud b.time-short { color: #f4a0a5; }
+.spark-hud .spark-time-earned { position: absolute; top: 100%; left: 0; white-space: nowrap; color: #f6d782; font: 7px monospace; letter-spacing: 0; margin-top: 3px; animation: time-earned .6s ease-out; }
+@keyframes time-earned { from { opacity: .5; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 .spark-hud .spark-combo b { font-size: 21px; color: var(--mint); }
 .spark-lives > div { display: flex; align-items: center; gap: 6px; height: 39px; }
 .spark-lives i { font: normal 19px var(--font-body); color: #353d4d; }
@@ -99,6 +105,9 @@
 .spark-cube { --cube-color: var(--mint); display: block; position: absolute; width: 28px; height: 28px; left: -14px; top: -14px; transform-style: preserve-3d; }
 .falling-spark[data-kind="violet"] .spark-cube { --cube-color: var(--accent); }
 .falling-spark[data-kind="glitch"] .spark-cube { --cube-color: #ee919b; }
+.falling-spark[data-kind="time"] .spark-cube { --cube-color: #f6d782; }
+.spark-time-label { display: none; position: absolute; left: 0; top: -39px; transform: translateX(-50%); padding: 3px 7px; border: 1px solid #f6d78270; border-radius: 10px; background: #272319; color: #ffe4a0; box-shadow: 0 0 18px #f6d78222; font: 600 11px monospace; white-space: nowrap; }
+.falling-spark[data-kind="time"] .spark-time-label { display: block; }
 .spark-face { position: absolute; inset: 0; border: 1px solid color-mix(in srgb,var(--cube-color) 80%,white); border-radius: 3px; display: grid; place-items: center; font-style: normal; backface-visibility: hidden; background: linear-gradient(145deg,color-mix(in srgb,var(--cube-color) 90%,white),color-mix(in srgb,var(--cube-color) 40%,#253144)); box-shadow: inset 1px 1px 5px #ffffff40; }
 .face-front { transform: translateZ(14px); }
 .face-back { transform: rotateY(180deg) translateZ(14px); }
@@ -108,8 +117,10 @@
 .face-bottom { transform: rotateX(-90deg) translateZ(14px); filter: brightness(.65); }
 .spark-face > span { position: absolute; font: 21px/1 var(--font-body); color: #112535; }
 .spark-face .glitch-symbol { display: none; font-size: 27px; color: #4d1626; }
-[data-kind="glitch"] .spark-symbol { display: none; }
+.spark-face .time-symbol { display: none; color: #483713; font-size: 23px; }
+[data-kind="glitch"] .spark-symbol, [data-kind="time"] .spark-symbol { display: none; }
 [data-kind="glitch"] .glitch-symbol { display: block; }
+[data-kind="time"] .time-symbol { display: block; }
 .spark-catcher { position: absolute; left: 0; top: 0; width: 100px; height: 26px; transform-style: preserve-3d; will-change: transform; }
 .catcher-body { position: absolute; width: 100%; left: -50%; top: 0; height: 23px; background: linear-gradient(#dce5ef,var(--accent) 17%,#7a7e93 55%,#343c51); border: 1px solid #dfe8f2a6; border-radius: 8px 8px 12px 12px; box-shadow: inset 0 -4px 7px #0007,0 9px 12px #0008,0 0 24px color-mix(in srgb,var(--accent) 15%,transparent); transform: perspective(180px) rotateX(15deg); }
 .catcher-body > i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #17243d; left: 43%; top: 9px; }
@@ -118,6 +129,7 @@
 .spark-catcher > span { position: absolute; left: 0; top: 30px; transform: translateX(-50%); font: 6px monospace; letter-spacing: .14em; color: #a1acc0; }
 .spark-catch-feedback { position: absolute; left: 0; top: 0; opacity: 0; z-index: 4; font: 600 15px var(--font-heading); color: var(--mint); text-shadow: 0 0 14px #000; }
 .spark-catch-feedback[data-kind="glitch"] { color: #ffacb2; font-size: 11px; }
+.spark-catch-feedback[data-kind="time"] { color: #f6d782; font-size: 18px; }
 .spark-overlay { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 26px; background: radial-gradient(ellipse at 50% 45%,#131b2a80,#0e121b70); }
 .phase-paused .spark-overlay,.phase-finished .spark-overlay { background: #0e121be8; backdrop-filter: blur(7px); }
 .phase-ready .spark-catcher { opacity: 0; }
@@ -185,4 +197,5 @@
   .spark-arcade-bottom .spark-control-label { display: none; }
   .light-band .section-space { padding-block: 60px; }
 }
-@media (prefers-reduced-motion: reduce) { .spark-trophy .spark-cube { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .spark-trophy .spark-cube, .spark-hud .spark-time-earned { animation: none; } }
+html[data-motion="off"] .spark-hud .spark-time-earned { animation: none; }

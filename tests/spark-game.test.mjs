@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { advanceRound, createRound, ROUND_SECONDS, CATCH_LINE, MAX_SPARKS } from "../lib/spark-game.ts";
+import { advanceRound, createRound, ROUND_SECONDS, CATCH_LINE, MAX_SPARKS, TIME_BONUSES, timeRemaining } from "../lib/spark-game.ts";
 
 function playing() { const r=createRound(42); r.phase="playing"; r.spawnIn=100; return r; }
-function atCatcher(id=0,glitch=false) { return {id,slot:0,x:0.5,y:CATCH_LINE-0.001,speed:0.3,spin:0,glitch}; }
+function atCatcher(id=0,kind="spark",bonusSeconds=0) { return {id,slot:0,x:0.5,y:CATCH_LINE-0.001,speed:0.3,spin:0,kind,bonusSeconds}; }
 
 test("catching sparks awards points and builds a multiplier",()=>{
   const r=playing();
@@ -12,7 +12,7 @@ test("catching sparks awards points and builds a multiplier",()=>{
 });
 test("a glitch breaks the streak and the third ends the round",()=>{
   const r=playing();r.score=40;r.combo=6;
-  for(let i=0;i<3;i++){r.items=[atCatcher(i,true)];advanceRound(r,0.04,600);}
+  for(let i=0;i<3;i++){r.items=[atCatcher(i,"glitch")];advanceRound(r,0.04,600);}
   assert.equal(r.lives,0);assert.equal(r.combo,0);assert.equal(r.phase,"finished");assert.equal(r.endedBy,"glitches");assert.equal(r.score,25);
 });
 test("paused and finished rounds cannot advance time or score",()=>{
@@ -44,4 +44,51 @@ test("a slow animation frame advances real time and still catches crossed sparks
 test("a long frame cannot extend a round beyond thirty seconds",()=>{
   const r=playing();advanceRound(r,45);
   assert.equal(r.elapsed,30);assert.equal(r.phase,"finished");
+});
+
+for (const seconds of TIME_BONUSES) {
+  test(`a +${seconds}s catch extends the deadline by exactly ${seconds} seconds`,()=>{
+    const r=playing();r.elapsed=ROUND_SECONDS-0.02;r.combo=5;r.score=40;
+    r.items=[atCatcher(0,"time",seconds)];advanceRound(r,0.04,600);
+    assert.equal(r.phase,"playing");assert.equal(r.bonusSeconds,seconds);
+    assert(Math.abs(timeRemaining(r)-(seconds-0.02))<1e-8);
+    assert.equal(r.score,40);assert.equal(r.combo,5);assert.equal(r.caught,0);assert.equal(r.lives,3);
+    assert.equal(r.effects[0].kind,"time");assert.equal(r.effects[0].bonusSeconds,seconds);
+    advanceRound(r,seconds+1,600);
+    assert.equal(r.phase,"finished");assert.equal(r.elapsed,ROUND_SECONDS+seconds);assert.equal(timeRemaining(r),0);
+  });
+}
+
+test("time catches stack, are collected once, and reset on a fresh round",()=>{
+  const r=playing();
+  for(const seconds of TIME_BONUSES){r.items=[atCatcher(seconds,"time",seconds)];advanceRound(r,0.04);}
+  assert.equal(r.bonusSeconds,10);assert.equal(r.items.length,0);
+  advanceRound(r,0.04);assert.equal(r.bonusSeconds,10);
+  advanceRound(r,45);assert.equal(r.elapsed,40);assert.equal(r.endedBy,"time");
+  const fresh=createRound();assert.equal(fresh.bonusSeconds,0);assert.equal(timeRemaining(fresh),30);
+});
+
+test("missing a time drop preserves score, lives, and streak",()=>{
+  const r=playing();r.combo=5;r.score=40;
+  r.items=[{...atCatcher(0,"time",4),x:0.03,y:1.099}];advanceRound(r,0.04);
+  assert.equal(r.combo,5);assert.equal(r.score,40);assert.equal(r.lives,3);assert.equal(r.bonusSeconds,0);assert.equal(r.items.length,0);
+});
+
+test("paused and finished rounds cannot collect time drops",()=>{
+  const r=playing();r.items=[atCatcher(0,"time",4)];
+  for(const phase of ["paused","finished"]){r.phase=phase;advanceRound(r,1);assert.equal(r.bonusSeconds,0);assert.equal(r.elapsed,0);assert.equal(r.items.length,1);}
+});
+
+test("time drops spawn during normal play with all four supported values",()=>{
+  const values=new Set();
+  for(let seed=1;seed<=16;seed++){
+    const r=createRound(seed);r.phase="playing";r.lives=100;
+    for(let i=0;i<700;i++){
+      advanceRound(r,0.04);
+      for(const item of r.items.filter(x=>x.kind==="time")){
+        assert(TIME_BONUSES.includes(item.bonusSeconds));values.add(item.bonusSeconds);
+      }
+    }
+  }
+  assert.deepEqual([...values].sort(),[1,2,3,4]);
 });
