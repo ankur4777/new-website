@@ -31,6 +31,28 @@
 .light-faq .faq-home { margin-top: 0; padding-block: 90px; }
 .light-faq + .footer-cta { margin-top: 0; }
 
+/* Light home-page work and process sections. Artwork keeps its own dark palette. */
+.light-work { background: #f5f4f0; color: #191c26; border-block: 1px solid #20253316; }
+.light-work .work-section { padding-block: 90px; }
+.light-work .eyebrow, .light-work .concept-label { color: #5f6370; }
+.light-work .serif-word { color: var(--paper-accent); }
+.light-work .text-link { color: #282c38; }
+.light-work .text-link:hover { color: var(--paper-accent); }
+.light-work .work-filters > button { color: #646975; }
+.light-work .work-filters > button.active { color: #191c26; background: #e9e8e2; border-color: #2025332b; }
+.light-work .work-filters > button:hover { color: var(--paper-accent); background: #e9e8e2; }
+.light-work .work-filters button > span { background: var(--paper-accent); }
+.light-work .project-meta h3 { color: #191c26; }
+.light-work .project-meta p, .light-work .project-meta > span { color: #646975; }
+.light-work .project-visual-wrap { color: var(--text); }
+.light-process { --accent-soft: color-mix(in srgb,var(--accent) 8%,transparent); --accent-line: color-mix(in srgb,var(--accent) 28%,transparent); }
+.light-process > .section-wrap { padding-block: 90px; }
+.light-process .muted, .light-process .process-number { color: #646975; }
+.light-process .process-step h3 { color: var(--text); }
+.light-process .process-number > svg, .light-process .process-output, .light-process .process-output svg { color: var(--accent); }
+.light-process .process-step.active, .light-process .process-step:hover { background: var(--accent-soft); }
+@media (max-width: 600px) { .light-work .work-section, .light-process > .section-wrap { padding-block: 65px; } }
+
 /* A tiny, self-contained arcade. Objects have six real CSS 3D faces. */
 .spark-section { display: grid; grid-template-columns: .7fr 1.3fr; gap: 65px; align-items: center; padding-block: 100px; scroll-margin-top: 110px; }
 .spark-intro > .eyebrow { color: var(--accent); font-size: 8px; }

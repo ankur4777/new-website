@@ -112,7 +112,8 @@ export default function Home() {
       </div>
       <ProjectBuilder />
       <SparkCatch />
-      <section className="work-section section-wrap section-space">
+      <div className="light-work">
+      <section className="work-section section-wrap section-space" id="selected-work">
         <div className="section-heading reveal">
           <div>
             <Eyebrow number="02 / 05">
@@ -129,6 +130,7 @@ export default function Home() {
         </div>
         <WorkGrid home />
       </section>
+      </div>
       <SignalBloom />
       <section className="studio-teaser section-wrap section-space">
         <div className="studio-visual reveal">
@@ -169,7 +171,8 @@ export default function Home() {
           </Button>
         </div>
       </section>
-      <section className="section-wrap section-space">
+      <div className="light-band light-process">
+      <section className="section-wrap section-space" id="our-process">
         <div className="section-heading reveal">
           <div>
             <Eyebrow number="04 / 05">FROM WHAT IF TO WHAT’S NEXT</Eyebrow>
@@ -186,6 +189,7 @@ export default function Home() {
         </div>
         <Process />
       </section>
+      </div>
       <div className="light-band light-faq">
       <section className="faq-home section-wrap section-space">
         <div className="reveal">
