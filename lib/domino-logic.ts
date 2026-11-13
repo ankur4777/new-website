@@ -89,6 +89,41 @@ export function canPlace(puzzle: Puzzle, placements: Placement[], candidate: Pla
   return !placements.some(p => placementCells(puzzle, p)?.some(cell => cells.includes(cell)));
 }
 
+/** Moving a piece is atomic: an invalid destination never loses its old position. */
+export function movePlacement(puzzle: Puzzle, placements: Placement[], candidate: Placement): Placement[] | null {
+  const remaining = placements.filter(p => p.tileId !== candidate.tileId);
+  return canPlace(puzzle, remaining, candidate) ? [...remaining, { ...candidate }] : null;
+}
+
+export function rotatePlacement(puzzle: Puzzle, placements: Placement[], tileId: string): Placement[] | null {
+  const current = placements.find(p => p.tileId === tileId);
+  if (!current) return null;
+  for (let turn = 1; turn < 4; turn++) {
+    const moved = movePlacement(puzzle, placements, { ...current, rotation: (current.rotation + turn) % 4 });
+    if (moved) return moved;
+  }
+  return null;
+}
+
+export type BoardGeometry = { left: number; top: number; width: number; height: number; gapX: number; gapY: number; inset: number };
+export type DragPoint = { x: number; y: number; grabX: number; grabY: number };
+/** Snap the actual grabbed point, even when the player holds the second end. */
+export function dragPlacementAtPoint(puzzle: Puzzle, geometry: BoardGeometry, point: DragPoint, tileId: string, rotation: number) {
+  const cellWidth = (geometry.width - geometry.gapX * (puzzle.width - 1)) / puzzle.width;
+  const cellHeight = (geometry.height - geometry.gapY * (puzzle.height - 1)) / puzzle.height;
+  const vertical = rotation % 2 === 1;
+  const width = (vertical ? cellWidth : cellWidth * 2 + geometry.gapX) - geometry.inset * 2;
+  const height = (vertical ? cellHeight * 2 + geometry.gapY : cellHeight) - geometry.inset * 2;
+  const left = point.x - point.grabX * width, top = point.y - point.grabY * height;
+  const anchorX = left + cellWidth / 2 - geometry.inset + (rotation === 2 ? cellWidth + geometry.gapX : 0);
+  const anchorY = top + cellHeight / 2 - geometry.inset + (rotation === 3 ? cellHeight + geometry.gapY : 0);
+  const col = Math.round((anchorX - geometry.left - cellWidth / 2) / (cellWidth + geometry.gapX));
+  const row = Math.round((anchorY - geometry.top - cellHeight / 2) / (cellHeight + geometry.gapY));
+  const inBounds = col >= 0 && col < puzzle.width && row >= 0 && row < puzzle.height;
+  const placement = inBounds && puzzle.cells[row * puzzle.width + col] !== null ? { tileId, cell: row * puzzle.width + col, rotation } : null;
+  return { left, top, width, height, placement };
+}
+
 export function inspectBoard(puzzle: Puzzle, placements: Placement[]) {
   const values: (number | null)[] = Array(puzzle.cells.length).fill(null);
   const seen = new Set<string>();
@@ -135,7 +170,7 @@ export function applyHint(puzzle: Puzzle, placements: Placement[]) {
   return { placements: [...kept, { ...next }], removed: placements.length - kept.length };
 }
 
-export type SavedProgress = { completed: number[]; levelId: number; placements: Placement[]; moves: number; hints: number };
+export type SavedProgress = { completed: number[]; levelId: number; placements: Placement[]; moves: number; hints: number; orientations: Record<string, number> };
 export function readProgress(value: unknown): SavedProgress | null {
   if (!value || typeof value !== "object") return null;
   const data = value as Partial<SavedProgress>;
@@ -144,10 +179,17 @@ export function readProgress(value: unknown): SavedProgress | null {
   const completed = [...new Set(data.completed.filter(id => Number.isInteger(id) && PUZZLES.some(p => p.id === id)))];
   const moves = typeof data.moves === "number" && Number.isSafeInteger(data.moves) && data.moves >= 0 ? data.moves : 0;
   const hints = typeof data.hints === "number" && Number.isSafeInteger(data.hints) && data.hints >= 0 ? data.hints : 0;
+  const orientations: Record<string, number> = {};
+  if (data.orientations && typeof data.orientations === "object") {
+    for (const tile of puzzle.tiles) {
+      const rotation = data.orientations[tile.id];
+      if (Number.isInteger(rotation) && rotation >= 0 && rotation < 4) orientations[tile.id] = rotation;
+    }
+  }
   const placements: Placement[] = [];
   for (const p of data.placements) {
-    if (!p || typeof p !== "object" || !canPlace(puzzle, placements, p)) return { completed, levelId: puzzle.id, placements: [], moves: 0, hints: 0 };
+    if (!p || typeof p !== "object" || !canPlace(puzzle, placements, p)) return { completed, levelId: puzzle.id, placements: [], moves: 0, hints: 0, orientations: {} };
     placements.push({ tileId: p.tileId, cell: p.cell, rotation: p.rotation });
   }
-  return { completed, levelId: puzzle.id, placements, moves, hints };
+  return { completed, levelId: puzzle.id, placements, moves, hints, orientations };
 }

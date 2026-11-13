@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { PUZZLES, DIFFICULTIES, placementCells, canPlace, inspectBoard, applyHint, readProgress } from "../lib/domino-logic.ts";
+import { PUZZLES, DIFFICULTIES, placementCells, canPlace, inspectBoard, applyHint, readProgress, movePlacement, rotatePlacement, dragPlacementAtPoint } from "../lib/domino-logic.ts";
 
 function fixture(kind, values, target=0) {
   const tiles=[{id:"a",a:values[0],b:values[1]},{id:"b",a:values[2],b:values[3]}];
@@ -89,4 +89,48 @@ test("saved progress restores only known levels and structurally valid placement
   assert.equal(readProgress({levelId:99,completed:[],placements:[]}),null);
   assert.equal(readProgress(null),null);
   for(const placements of [[p.solution[0],p.solution[0]],[{tileId:"bad",cell:0,rotation:0}],[null]])assert.deepEqual(readProgress({levelId:1,completed:[1],placements}).placements,[]);
+});
+
+test("a placed piece can move directly without colliding with its previous cells",()=>{
+  const p=PUZZLES[0],before=[{tileId:p.tiles[0].id,cell:0,rotation:0}],snapshot=structuredClone(before);
+  const moved=movePlacement(p,before,{...before[0],cell:1});
+  assert.equal(moved.length,1);assert.equal(moved[0].cell,1);assert.deepEqual(before,snapshot);
+});
+
+test("an invalid move keeps the source intact and never overwrites another piece",()=>{
+  const p=PUZZLES[0],before=[{tileId:p.tiles[0].id,cell:0,rotation:0},{tileId:p.tiles[1].id,cell:2,rotation:0}],snapshot=structuredClone(before);
+  assert.equal(movePlacement(p,before,{...before[0],cell:1}),null);
+  assert.equal(movePlacement(p,before,{...before[0],cell:3}),null);
+  assert.deepEqual(before,snapshot);
+});
+
+test("tap rotation ignores the piece's own footprint and skips blocked angles",()=>{
+  const p=PUZZLES[0],original={tileId:p.tiles[0].id,cell:0,rotation:0};
+  assert.equal(rotatePlacement(p,[original],original.tileId)[0].rotation,1);
+  const edge={...original,cell:8};assert.equal(rotatePlacement(p,[edge],edge.tileId)[0].rotation,3);
+  assert.equal(rotatePlacement(p,p.solution,p.solution[0].tileId),null);
+});
+
+const geometry={left:100,top:80,width:255,height:190,gapX:5,gapY:5,inset:4};
+for(const rotation of [0,1,2,3])for(const [grabX,grabY] of [[0.1,0.2],[0.5,0.5],[0.9,0.8]])test(`drag snapping preserves grab point at rotation ${rotation}, grip ${grabX}/${grabY}`,()=>{
+  const p=PUZZLES[0],vertical=rotation%2===1;
+  const width=vertical?52:117,height=vertical?117:52;
+  const left=169-(rotation===2?65:0),top=149-(rotation===3?65:0);
+  const result=dragPlacementAtPoint(p,geometry,{x:left+grabX*width,y:top+grabY*height,grabX,grabY},p.tiles[0].id,rotation);
+  assert.equal(result.placement.cell,5);assert.equal(result.placement.rotation,rotation);
+  assert(Math.abs(result.left-left)<1e-8);assert(Math.abs(result.top-top)<1e-8);
+  assert.equal(result.width,width);assert.equal(result.height,height);
+});
+
+test("drops outside the board or over holes do not produce placements",()=>{
+  const p=PUZZLES[0];
+  for(const point of [{x:-100,y:0},{x:900,y:900}])assert.equal(dragPlacementAtPoint(p,geometry,{...point,grabX:0.5,grabY:0.5},p.tiles[0].id,0).placement,null);
+  const shaped=PUZZLES[16],shapeGeometry={left:0,top:0,width:385,height:255,gapX:5,gapY:5,inset:4};
+  assert.equal(dragPlacementAtPoint(shaped,shapeGeometry,{x:58.5,y:30,grabX:0.5,grabY:0.5},shaped.tiles[0].id,0).placement,null);
+});
+
+test("rack orientations save safely and old progress remains compatible",()=>{
+  const p=PUZZLES[0],saved=readProgress({levelId:1,completed:[],placements:[],orientations:{[p.tiles[0].id]:3,[p.tiles[1].id]:9,unknown:2}});
+  assert.deepEqual(saved.orientations,{[p.tiles[0].id]:3});
+  assert.deepEqual(readProgress({levelId:1,completed:[],placements:[]}).orientations,{});
 });
