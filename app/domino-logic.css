@@ -1,0 +1,141 @@
+.logic-section { padding-block: 50px 105px; scroll-margin-top: 115px; }
+.logic-heading { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: end; margin-bottom: 37px; }
+.logic-heading .eyebrow { font-size: 8px; color: var(--accent); }
+.logic-heading h2 { margin-top: 22px; font-size: clamp(36px,3.7vw,52px); }
+.logic-heading-note { max-width: 375px; justify-self: end; padding-left: 85px; position: relative; }
+.logic-heading-note p { font-size: 12px; line-height: 1.9; }
+.logic-heading-note > span:last-child { display: block; font: 7px monospace; letter-spacing: .07em; color: #9399aa; margin-top: 18px; }
+.logic-heading-mark { position: absolute; left: 0; top: 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 47px; height: 87px; border: 1px solid color-mix(in srgb,var(--accent) 60%,transparent); border-radius: 9px; transform: rotate(-13deg); background: linear-gradient(125deg,#ffffff16,#ffffff03); box-shadow: 5px 6px 0 #ffffff05; color: var(--accent); }
+.logic-heading-mark::after { content: ""; width: 28px; height: 1px; position: absolute; top: 50%; background: #ffffff3d; }
+.logic-heading-mark .logic-pips { width: 23px; height: 23px; }
+.logic-pips { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr); gap: 3px; width: 58%; max-width: 32px; aspect-ratio: 1; flex-shrink: 0; }
+.logic-pips i { display: block; border-radius: 50%; background: currentColor; visibility: hidden; }
+.logic-pips i.on { visibility: inherit; }
+.logic-game { --logic-ink: #252936; --logic-soft: #6d6e77; --logic-line: #272c361c; --logic-purple: #625079; background: #f4f0e8; color: var(--logic-ink); border: 1px solid #ffffff3d; border-radius: 20px; overflow: hidden; box-shadow: 0 24px 80px #0003; }
+.logic-game button { cursor: pointer; }
+.logic-game button:disabled { cursor: default; }
+.logic-game button:focus-visible, .logic-help button:focus-visible { outline: 2px solid #625079; outline-offset: 4px; }
+.logic-topline { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 22px 29px; border-bottom: 1px solid var(--logic-line); }
+.logic-wordmark { display: flex; gap: 7px; align-items: center; font-size: 12px; font-weight: 650; letter-spacing: .04em; }
+.logic-wordmark > svg { color: #7e6e9b; margin-right: 5px; }
+.logic-wordmark > i { font-style: normal; color: #a9a2b2; font-weight: 400; }
+.logic-wordmark > small { font: 7px monospace; font-weight: 400; color: #797985; letter-spacing: .1em; margin-left: 15px; padding-left: 20px; border-left: 1px solid #282c3424; }
+.logic-help-button { display: flex; gap: 7px; align-items: center; font-size: 10px; color: #62606e; min-height: 32px; }
+.logic-help-button > span { display: grid; place-items: center; width: 16px; height: 16px; border: 1px solid #79738480; border-radius: 50%; font: 10px monospace; }
+.logic-help-button:hover { color: var(--logic-purple); }
+.logic-level-controls { display: flex; align-items: center; gap: 25px; padding: 21px 29px 5px; flex-wrap: wrap; }
+.logic-difficulties { display: flex; gap: 3px; border: 1px solid #272c361a; border-radius: 30px; padding: 4px; background: #eae6df; }
+.logic-difficulties button { display: flex; align-items: center; gap: 6px; padding: 9px 15px; font-size: 10px; color: #77747c; border-radius: 20px; min-height: 34px; transition: background .2s,color .2s; }
+.logic-difficulties button.active { color: #fff; background: #343342; box-shadow: 0 3px 7px #0001; }
+.logic-difficulties i { width: 4px; height: 4px; border-radius: 50%; background: #7d9e8c; }
+.logic-difficulties i[data-difficulty="Medium"] { background: #c4a166; }
+.logic-difficulties i[data-difficulty="Hard"] { background: #b78399; }
+.logic-levels { display: flex; gap: 7px; }
+.logic-levels > button { position: relative; width: 35px; height: 35px; border: 1px solid #292d3426; border-radius: 8px; font: 10px monospace; color: #70717d; transition: background .2s,border-color .2s; }
+.logic-levels > button.active { background: #e4dced; border-color: #8a779c; color: #503d64; }
+.logic-levels > button:hover { border-color: #8a779c; }
+.logic-levels > button.completed > span { display: grid; place-items: center; width: 12px; height: 12px; position: absolute; top: -4px; right: -4px; background: #48725d; color: #fff; border-radius: 50%; font-size: 8px; }
+.logic-total { font: 10px monospace; margin-left: auto; color: #646470; }
+.logic-total i { font-style: normal; color: #96939b; margin-right: 5px; }
+.logic-game-layout { display: grid; grid-template-columns: minmax(0,1fr) 320px; gap: 40px; padding: 30px 35px 35px; }
+.logic-puzzle-title { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 14px; }
+.logic-puzzle-title > div > span { font: 7px monospace; letter-spacing: .1em; color: #8b8591; }
+.logic-puzzle-title h3 { font-size: 24px; letter-spacing: -.045em; font-weight: 500; margin-top: 7px; }
+.logic-pieces-count { font: 14px monospace; color: #97939e; text-align: right; }
+.logic-pieces-count > b { color: #383545; font-weight: 500; }
+.logic-pieces-count > small { display: block; font: 6px monospace; letter-spacing: .06em; margin-top: 6px; color: #87828d; }
+.logic-board-stage { display: grid; place-items: center; padding: 23px 10px 25px; border: 1px solid #292d3410; border-radius: 13px; background: radial-gradient(ellipse at 50% 65%,#e0dbd380,#eae6de18); }
+.logic-board { display: grid; grid-template-columns: repeat(var(--logic-columns),minmax(0,1fr)); grid-template-rows: repeat(var(--logic-rows),minmax(0,1fr)); gap: 5px; width: min(100%,calc(var(--logic-columns) * 76px)); aspect-ratio: var(--logic-columns) / var(--logic-rows); position: relative; isolation: isolate; }
+.logic-cell { position: relative; min-width: 0; min-height: 0; background: var(--region); border: 1px solid color-mix(in srgb,var(--region) 70%,#68606b); border-radius: 9px; transition: box-shadow .15s,filter .15s; }
+.logic-cell:hover:not(:disabled) { filter: brightness(1.04); }
+.logic-region-letter { position: absolute; top: 3px; left: 5px; font: 7px monospace; color: #2d303a9e; line-height: 1; }
+.logic-cell.ghost-good { box-shadow: inset 0 0 0 3px #64567b; }
+.logic-cell.ghost-bad { box-shadow: inset 0 0 0 3px #af5360; }
+.logic-ghost-dots { position: absolute; inset: 13px; display: grid; place-items: center; color: #493c6166; }
+.logic-ghost-dots .logic-pips { width: 27px; max-width: 65%; }
+.logic-placed-tile { display: flex; align-items: center; justify-content: space-evenly; gap: 3px; min-width: 0; min-height: 0; z-index: 2; background: linear-gradient(130deg,#fffef9,#eae8e3); border: 1px solid #b4b0b0; border-bottom: 3px solid #a5a1a4; border-radius: 8px; margin: 8px; color: #303343; box-shadow: 0 2px 4px #292a3421,inset 0 1px 0 #fff; animation: logic-place .2s ease-out; }
+.logic-placed-tile.vertical { flex-direction: column; }
+.logic-placed-tile:hover:not(:disabled) { border-color: #645279; background: #fffdfd; }
+.logic-placed-tile .logic-pips { width: 26%; max-width: 30px; }
+.logic-placed-tile.vertical .logic-pips { width: 55%; max-width: 30px; }
+.logic-divider { display: block; width: 1px; height: 60%; background: #aaa5b24d; flex-shrink: 0; }
+.vertical > .logic-divider { width: 60%; height: 1px; }
+.logic-region-badge { z-index: 3; align-self: end; justify-self: end; transform: translate(3px,4px); min-width: 23px; height: 20px; display: grid; place-items: center; padding: 2px 5px; background: #454151; border: 1px solid #faf7ef; color: white; border-radius: 6px 6px 6px 2px; font: 9px monospace; pointer-events: none; box-shadow: 0 2px 5px #0002; }
+.logic-region-badge.met { background: #426b54; }
+.logic-region-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 25px; }
+.logic-region-heading > span { font: 7px monospace; letter-spacing: .09em; color: #8b8591; }
+.logic-region-heading > b { color: #7d7686; font-size: 8px; font-weight: 400; }
+.logic-region-list { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; }
+.logic-region-rule { display: flex; align-items: center; gap: 9px; padding: 9px; min-width: 0; border: 1px solid #292d3416; border-radius: 8px; background: #ffffff38; }
+.logic-rule-color { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 6px; background: var(--region); color: #3f3c49; border: 1px solid #292d3421; font: 9px monospace; flex-shrink: 0; }
+.logic-region-rule > span:nth-child(2) { min-width: 0; }
+.logic-region-rule > span:nth-child(2) > b { font: 500 12px monospace; display: block; }
+.logic-region-rule > span:nth-child(2) > small { display: block; font-size: 8px; color: #7c7684; margin-top: 3px; line-height: 1.6; }
+.logic-rule-status { margin-left: auto; text-align: center; color: #9e97a5; font: 12px monospace; }
+.logic-rule-status > b { display: block; color: #797381; font-weight: 400; }
+.logic-rule-status > small { display: block; font: 6px monospace; margin-top: 3px; }
+.logic-region-rule.good { border-color: #48725d40; background: #48725d08; }
+.logic-region-rule.good .logic-rule-status { color: #48725d; }
+.logic-region-rule.bad { border-color: #ad5a677a; background: #ad5a670d; }
+.logic-region-rule.bad .logic-rule-status { color: #ad5a67; }
+.logic-tray-column { padding: 24px; border: 1px solid #272c3617; border-radius: 12px; background: #eae5dc70; align-self: stretch; }
+.logic-tray-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.logic-tray-heading > span { font: 8px monospace; letter-spacing: .08em; color: #7b7484; }
+.logic-tray-heading > b { font-size: 8px; font-weight: 400; color: #8c8494; }
+.logic-game .logic-tray-instruction { color: #787180; font-size: 10px; line-height: 1.9; margin-top: 12px; }
+.logic-tray { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px 9px; margin-top: 21px; }
+.logic-tray-tile { display: flex; justify-content: space-evenly; align-items: center; position: relative; height: 43px; min-width: 0; padding: 7px 3px; gap: 3px; border: 1px solid #c1b9c4; border-bottom: 3px solid #b1a9b5; border-radius: 7px; background: linear-gradient(125deg,#fffefb,#e9e6e3); color: #3e394a; box-shadow: 0 3px 3px #3d2f4b0b; transition: transform .2s,border-color .2s; }
+.logic-tray-tile .logic-pips { width: 23px; max-width: 34%; aspect-ratio: 1; gap: 2px; }
+.logic-tray-tile .logic-divider { height: 21px; }
+.logic-tray-tile:hover:not(:disabled) { transform: translateY(-3px); border-color: #837095; }
+.logic-tray-tile.selected { border-color: #79648f; background: #ede5f5; box-shadow: 0 0 0 2px #9a83b03b; transform: translateY(-3px); }
+.logic-tray-tile.placed { opacity: .28; border-style: dashed; background: transparent; border-bottom-width: 1px; box-shadow: none; }
+.logic-tile-check { position: absolute; inset: 0; display: grid; place-items: center; background: #f0ece4dd; font-size: 14px; color: #4c755e; }
+.logic-selection { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; border-block: 1px solid #292d341c; margin-top: 25px; padding-block: 16px; }
+.logic-selection > span { font-size: 10px; color: #8c8494; }
+.logic-selection > b { font-size: 22px; font-weight: 400; color: #61516f; display: flex; align-items: center; gap: 8px; }
+.logic-selection > b small { font: 6px monospace; color: #8c8397; letter-spacing: .07em; }
+.logic-selection > button { grid-column: 1/-1; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 35px; border-radius: 6px; background: #ddd4e6; color: #665277; font-size: 9px; }
+.logic-selection > button:disabled { opacity: .4; }
+.logic-selection.has-selection > span { color: #625079; font: 14px monospace; }
+.logic-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 18px; }
+.logic-actions > button { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 8px 7px; min-height: 37px; font-size: 9px; color: #71647f; border: 1px solid #80718f3b; border-radius: 6px; }
+.logic-actions > button:hover:not(:disabled) { background: #dcd3e4; border-color: #8a779c; }
+.logic-actions > button:disabled { opacity: .33; }
+.logic-message { border-left: 2px solid #9583a6; margin-top: 23px; padding-left: 12px; display: flex; align-items: flex-start; gap: 8px; }
+.logic-game .logic-message > p { color: #7c7287; font-size: 9px; line-height: 1.9; }
+.logic-message.success { border-color: #48725d; color: #48725d; }
+.logic-game .logic-message.success > p { color: #48725d; }
+.logic-small-note { display: flex; align-items: center; gap: 12px; margin-top: 26px; opacity: .6; }
+.logic-small-note > span { font-size: 30px; color: #9583a6; }
+.logic-game .logic-small-note > p { font-size: 9px; line-height: 1.8; color: #8d8198; }
+.logic-complete { margin-top: 21px; padding-top: 21px; border-top: 1px solid #48725d35; animation: logic-place .4s ease-out; }
+.logic-complete > span { font: 6px monospace; letter-spacing: .06em; color: #668273; }
+.logic-complete > h4 { color: #3e614d; font-size: 25px; line-height: 1.2; letter-spacing: -.04em; margin-top: 8px; font-weight: 500; }
+.logic-game .logic-complete > p { color: #7b8f82; font-size: 8px; margin-top: 9px; }
+.logic-complete > button { width: 100%; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 15px; color: white; background: #48725d; border-radius: 6px; font-size: 10px; min-height: 42px; }
+.logic-bottom { display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 17px 29px; border-top: 1px solid #272c3617; background: #e9e4dc75; }
+.logic-game .logic-bottom > p { font-size: 8px; color: #8b8194; line-height: 1.8; max-width: 600px; }
+.logic-bottom > span { font: 7px monospace; color: #9b91a3; text-align: right; white-space: nowrap; }
+.logic-help { margin: auto; border: 1px solid #bdb5c6; padding: 40px; border-radius: 18px; background: #f4f0e8; color: #34313f; width: min(550px,calc(100vw - 28px)); max-height: min(850px,calc(100dvh - 35px)); overflow-y: auto; box-shadow: 0 30px 100px #0006; }
+.logic-help::backdrop { background: #070912c9; backdrop-filter: blur(6px); }
+.logic-help-close { position: absolute; right: 19px; top: 15px; display: grid; place-items: center; width: 35px; height: 35px; color: #7c6a8a; cursor: pointer; }
+.logic-help-kicker { font: 7px monospace; letter-spacing: .1em; color: #8d7c9a; }
+.logic-help h3 { font-size: 39px; font-weight: 450; line-height: 1.1; letter-spacing: -.05em; margin-top: 20px; }
+.logic-help h3 em { color: #827093; }
+.logic-help > p { font-size: 11px; line-height: 1.9; color: #797180; margin-top: 19px; }
+.logic-help ol { margin: 23px 0 0; padding-left: 17px; list-style: decimal; display: grid; gap: 13px; font-size: 11px; line-height: 1.9; color: #797180; }
+.logic-help li { padding-left: 6px; }
+.logic-help li b { color: #4d4358; font-weight: 550; }
+.logic-help-rules { display: grid; gap: 10px; border-block: 1px solid #8d7c9a33; padding-block: 20px; margin-top: 25px; }
+.logic-help-rules > p { display: flex; align-items: center; gap: 17px; font-size: 10px; color: #797180; }
+.logic-help-rules b { min-width: 55px; font: 15px monospace; text-align: center; color: #70607f; }
+.logic-help .logic-help-last { font-size: 10px; }
+.logic-help-start { margin-top: 23px; display: flex; justify-content: space-between; gap: 20px; align-items: center; width: 100%; background: #6c557f; border-radius: 7px; padding: 14px 17px; color: white; font-size: 11px; cursor: pointer; }
+@keyframes logic-place { from { opacity: .5; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width:1100px) { .logic-game-layout { grid-template-columns: minmax(0,1fr) 285px; gap: 25px; padding: 25px; } .logic-tray-column { padding: 19px; } .logic-level-controls { gap: 15px; } .logic-levels { gap: 5px; } .logic-levels > button { width: 30px; height: 32px; } .logic-total { width: 100%; text-align: right; margin-top: -9px; } }
+@media (max-width:800px) { .logic-heading { grid-template-columns: 1fr; gap: 25px; } .logic-heading-note { justify-self: start; max-width: 430px; } .logic-game-layout { grid-template-columns: minmax(0,1fr) 235px; gap: 17px; padding: 20px; } .logic-tray-column { padding: 15px; } .logic-tray { gap: 10px 7px; grid-template-columns: repeat(2,minmax(0,1fr)); } .logic-puzzle-title h3 { font-size: 21px; } .logic-region-list { grid-template-columns: 1fr; } .logic-placed-tile { margin: 6px; } .logic-region-letter { font-size: 6px; left: 3px; top: 2px; } .logic-region-badge { min-width: 20px; height: 18px; font-size: 8px; } .logic-bottom { flex-wrap: wrap; gap: 9px; } .logic-bottom > span { text-align: left; } }
+@media (max-width:650px) { .logic-section { padding-block: 20px 65px; } .logic-heading h2 { font-size: 38px; } .logic-heading-note p { font-size: 11px; } .logic-heading-note > span:last-child { font-size: 6px; } .logic-game { border-radius: 13px; } .logic-topline { padding: 17px; } .logic-wordmark { font-size: 11px; } .logic-wordmark > small { display: none; } .logic-help-button { font-size: 9px; } .logic-level-controls { padding: 17px; gap: 14px; } .logic-difficulties { width: 100%; justify-content: center; } .logic-difficulties button { flex: 1; justify-content: center; } .logic-levels { gap: 6px; } .logic-levels > button { width: 33px; height: 34px; } .logic-total { width: auto; margin: 0 0 0 auto; font-size: 8px; } .logic-game-layout { grid-template-columns: 1fr; gap: 25px; padding: 5px 17px 20px; } .logic-puzzle-title h3 { font-size: 24px; } .logic-puzzle-title { margin-bottom: 17px; } .logic-board-stage { padding: 22px 8px; } .logic-board { gap: 4px; } .logic-cell { border-radius: 6px; } .logic-placed-tile { margin: 7px; border-radius: 5px; } .logic-region-list { grid-template-columns: 1fr 1fr; } .logic-region-rule { padding: 7px; gap: 6px; } .logic-rule-color { width: 24px; height: 24px; } .logic-region-rule > span:nth-child(2) > small { font-size: 7px; } .logic-tray-column { padding: 19px; } .logic-tray { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px 8px; } .logic-tray-instruction br { display: none; } .logic-selection { margin-top: 22px; grid-template-columns: 1fr auto auto; } .logic-selection > button { grid-column: auto; padding: 9px; } .logic-selection > b { gap: 6px; } .logic-selection > b small { font-size: 5px; } .logic-actions { grid-template-columns: repeat(4,minmax(0,1fr)); } .logic-actions > button { gap: 4px; font-size: 8px; padding-inline: 4px; } .logic-small-note { margin-top: 18px; } .logic-bottom { padding: 15px 18px; } .logic-help { padding: 33px 25px 25px; } }
+@media (max-width:380px) { .logic-level-controls { gap: 13px; } .logic-levels { gap: 5px; } .logic-levels > button { width: 29px; } .logic-total { font-size: 7px; } .logic-tray { grid-template-columns: repeat(3,minmax(0,1fr)); } .logic-selection { grid-template-columns: 1fr auto; } .logic-selection > button { grid-column: 1/-1; } .logic-region-list { grid-template-columns: 1fr; } .logic-placed-tile { margin: 5px; } .logic-pips { gap: 2px; } }
+@media (prefers-reduced-motion:reduce) { .logic-placed-tile,.logic-complete { animation: none; } .logic-game button { transition: none; } }
+html[data-motion="off"] .logic-placed-tile,html[data-motion="off"] .logic-complete { animation: none; }

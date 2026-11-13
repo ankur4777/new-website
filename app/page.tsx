@@ -2,6 +2,7 @@ import Link from "next/link";
 import Scene from "@/components/studio/scene";
 import SignalBloom from "@/components/studio/signal-bloom";
 import SparkCatch from "@/components/studio/spark-catch";
+import DominoLogic from "@/components/studio/domino-logic";
 import ProjectBuilder from "@/components/studio/project-builder";
 import { AnimatedIcon } from "@/components/studio/animated-icon";
 import {
@@ -80,7 +81,7 @@ export default function Home() {
           <p>
             Your vision. Our curiosity. <span>Something extraordinary.</span>
           </p>
-          <span className="hero-experiments"><a className="hero-scroll-index playground-shortcut" href="#spark-catch">PLAY SPARK CATCH <AnimatedIcon name="down" size={13}/></a><a className="hero-scroll-index playground-shortcut" href="#idea-studio">TRY YOUR IDEA <AnimatedIcon name="down" size={13}/></a></span>
+          <span className="hero-experiments"><a className="hero-scroll-index playground-shortcut" href="#spark-catch">SPARK CATCH <AnimatedIcon name="down" size={13}/></a><a className="hero-scroll-index playground-shortcut" href="#domino-logic">DOT / LOGIC <AnimatedIcon name="down" size={13}/></a><a className="hero-scroll-index playground-shortcut" href="#idea-studio">TRY YOUR IDEA <AnimatedIcon name="down" size={13}/></a></span>
         </div>
       </section>
       <TechnologyRibbon />
@@ -112,6 +113,7 @@ export default function Home() {
       </div>
       <ProjectBuilder />
       <SparkCatch />
+      <DominoLogic />
       <div className="light-work">
       <section className="work-section section-wrap section-space" id="selected-work">
         <div className="section-heading reveal">
